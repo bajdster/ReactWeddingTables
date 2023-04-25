@@ -1,0 +1,148 @@
+@import "../index.scss";
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Black+Ops+One&family=Lily+Script+One&family=Nova+Oval&family=Wallpoet&display=swap');
+
+.addGuestWindow
+{
+    width:100%;
+    min-height: 100%;
+    background-color: rgba(0, 0, 0, 0.829);
+    position: absolute;
+    @include flexCenter;
+
+    
+    form
+    {
+        position: relative;
+        width:50%;
+        height: 70%;
+        background-color: white;
+        border-radius: 5px;
+        @include flexCenter;
+        flex-direction: column;
+        font-family: 'Nova Oval', cursive;
+
+        input
+        {
+            height: 25px
+        }
+
+        select
+        {
+            height: 25px;
+            font-size: 18px;
+        }
+
+        .inputBox
+        {
+            @include flexCenter;
+            border: 1px solid $base-color;
+            padding: 10px;
+            border-radius: 5px;
+            width:80%;
+            margin-bottom: 5px;
+    
+            .inputIcon
+            {
+                @include flexCenter;
+                height: 100%;
+                font-size: 28px;
+                margin-right: 10px;
+            }
+    
+            .inputField
+            {
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: beige;
+                align-items: flex-start;
+                width:90%;
+            }
+        }
+
+        .childBox
+        {
+            width:80%;
+            display: flex;
+            justify-content: flex-end;
+
+                .childInputBox
+            {
+                @include flexCenter;
+                border: 1px solid $base-color;
+                padding: 10px;
+                border-radius: 5px;
+                width:80%;
+                align-self: flex-end;
+                margin-bottom: 5px;
+                
+        
+                .inputIcon
+                {
+                    @include flexCenter;
+                    height: 100%;
+                    font-size: 18px;
+                    margin-right: 10px;
+                }
+        
+                .childInputField
+                {
+                    display: flex;
+                    flex-direction: column;
+                    padding: 10px;
+                    font-size: 12px;
+                    border-radius: 5px;
+                    background-color: beige;
+                    align-items: flex-start;
+                    width:80%;
+                    height: 30px;
+                }
+            }
+        }
+        
+
+        .closeWindow
+        {
+            position: absolute;
+            font-size: 30px;
+            right:10px;
+            top:10px;
+
+            .closeButton
+            {
+                fill: $base-color;
+                padding: 0;
+
+                &:hover
+                {
+                    fill: black;
+                    cursor: pointer;
+                }
+            }
+        }
+
+
+    }
+
+   button
+   {
+        width:80%;
+        background-color: $base-color;
+        height: 50px;
+        border: none;
+        border-radius: 5px;
+        margin-top:20px;
+        margin-bottom:20px;
+        color: white;
+        font-size: 20px;
+        box-shadow: 2px 2px 7px black;
+
+        &:hover
+        {
+            cursor: pointer;
+            transform: scale(1.02);
+        }
+   }
+  
+}

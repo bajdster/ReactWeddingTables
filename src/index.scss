@@ -1,0 +1,14 @@
+$base-color: rgb(182, 150, 60);
+
+
+@mixin flexCenter
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body {
+  margin: 0;
+  /* background-color: grey; */
+}

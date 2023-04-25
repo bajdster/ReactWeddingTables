@@ -1,0 +1,10 @@
+@import "../index.scss";
+
+.tableBox
+{
+    min-width:100px;
+    height: 50px;
+    background-color: cadetblue;
+    @include flexCenter
+
+}
