@@ -5,6 +5,7 @@ import GuestForm from './GuestForm';
 import classes from "./MainWindow.module.scss"
 import TableForm from './TableForm';
 
+
 const MainWindow:React.FC = () => {
 
     const [addGuestForm, setAddGuestForm] = useState<boolean>(false)
@@ -19,13 +20,16 @@ const MainWindow:React.FC = () => {
         setAddTableForm(prev=> !prev)
     }
 
+    //continue with btf dnd library
   return (
+    
     <div className={classes.mainWindow}>
         <AsideMenu openFormHandler={openFormHandler} openTableFormHandler={openTableFormHandler}/>
         <Hall/>
         {addGuestForm && <GuestForm openFormHandler={openFormHandler}/>}
         {addTableForm && <TableForm openTableFormHandler={openTableFormHandler}/>}
     </div>
+    
   )
 }
 

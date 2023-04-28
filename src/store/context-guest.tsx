@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react"
 import Guest from "../models/Guest"
 import Table from "../models/Table"
 
+
 // type Guest = {
 //     id?: string,
 //     name: string,
@@ -56,8 +57,8 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
             const guest:Guest = {
                 name: data[key].name,
                 id: data[key].id,
-                partner: data[key].partner,
-                children: data[key].children
+                // partner: data[key].partner,
+                // children: data[key].children
             }
 
             addedGuests.push(guest)
@@ -108,6 +109,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
 
     return (
         <GuestContext.Provider value={contextValue}>
+            
             {props.children}
         </GuestContext.Provider>
     )
@@ -120,3 +122,5 @@ export default GuestContext;
 //turn GuestItem to droppable
 //think about saving state of the tables
 //create importing system for guests saved in pdf
+
+//change the way to adding guests not as 3 groups of people connected to one

@@ -8,7 +8,9 @@ $base-color: rgb(182, 150, 60);
   justify-content: center;
 }
 
-body {
+
+body, html {
   margin: 0;
   /* background-color: grey; */
+  height: 100%;
 }

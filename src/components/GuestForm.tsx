@@ -53,8 +53,12 @@ const submitGuestHandler = (e:React.FormEvent) =>
     e.preventDefault();
     //use function from context to add guest
     ctx.addGuest({name: name, partner: accompanyName, group: group, children: childrenNames, id: uuidv4()})
+    ctx.addGuest({name: accompanyName, group: group, id: uuidv4()})
+    childrenNames.forEach((child)=>
+    {
+        ctx.addGuest({name:child.name, group: group, id: uuidv4()})
+    })
 }
-
 
 useEffect(()=>
 {

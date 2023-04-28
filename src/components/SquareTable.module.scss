@@ -2,9 +2,45 @@
 
 .tableBox
 {
-    min-width:100px;
-    height: 50px;
-    background-color: cadetblue;
-    @include flexCenter
+    width:60px;
+    height: 100px;
+    background-color: transparent;
+    @include flexCenter;
+    flex-direction:column;
+    position: absolute;
+    top:0;
+    left:0;
+    cursor:move;
+    // overflow: hidden;
+   
+    &.vertical
+    {
+        transform: rotate(90deg);
+    }
 
+
+    .table
+    {
+        background-color: yellow;
+        width:100%;
+        height: 100%;
+        @include flexCenter;
+    }
+
+
+    .options
+    {
+        position: absolute;
+        top:0;
+        left:-40px;
+       
+
+        button
+        {
+            width:30px;
+            height: 30px;
+            @include flexCenter;
+            border-radius: 50%;
+        }
+    }
 }
