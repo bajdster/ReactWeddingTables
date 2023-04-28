@@ -1,16 +1,19 @@
 import React, { useRef, useState, useEffect } from "react";
 import classes from "./SquareTable.module.scss";
 import Table from "../models/Table";
-import Half from "./Half";
+// import Half from "./Half";
 import {BiRefresh} from "react-icons/bi"
-import {AiFillDelete, AiFillEdit} from "react-icons/ai"
+import {AiFillDelete, AiFillEdit} from "react-icons/ai";
+import Seat from "./Seat";
 
 const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>}> = (props) => {
   const seats = props.table.seats;
-  const half = Math.ceil(seats.length / 2);
 
-  const firstHalf = seats.slice(0, half);
-  const secondHalf = seats.slice(half);
+  console.log(seats)
+  // const half = Math.ceil(seats.length / 2);
+
+  // const firstHalf = seats.slice(0, half);
+  // const secondHalf = seats.slice(half);
 
   const tableRef = useRef<HTMLDivElement>(null);
   const isClicked = useRef<boolean>(false);
@@ -124,9 +127,16 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
         // onMouseMove={handleMouseMove}
         // onMouseUp={handleMouseUp}
       >
-        <Half half={firstHalf} name="first" />
-          <div className={classes.table}>{props.table.name}</div>
-        <Half half={secondHalf} name="second" />
+        {/* <Half half={firstHalf} name="first" /> */}
+        
+          <div className={classes.table}>
+          <span>{props.table.name}</span>
+          {seats.map((seat, index)=>
+            {
+              return <Seat id={index} index={index}/>
+            })}
+          </div>
+        {/* <Half half={secondHalf} name="second" /> */}
 
         <div className={classes.options}>
           <button onClick={rotateTableHandler} style={{transform: `rotate(${rotation}deg)`}}><BiRefresh/></button>

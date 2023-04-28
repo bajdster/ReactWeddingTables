@@ -4,18 +4,20 @@ import { Droppable } from 'react-beautiful-dnd';
 
 const Seat:React.FC<{id:number, index: number}> = (props) => {
 
-
   return (
-    <Droppable droppableId={`seat${props.id}`}>
+    <Droppable droppableId={`seat${props.id}`} index={props.index}>
         {
+          
           (provided:any)=>(
-            <div className={classes.seat} ref={provided.innerRef}{...provided.droppableProps}>Seat
+            <div className={classes.seat} ref={provided.innerRef}{...provided.droppableProps}>
+              {props.index}
             {provided.placeholder} 
             </div>
             
           )
            
         }
+        
         
 
         
@@ -25,4 +27,4 @@ const Seat:React.FC<{id:number, index: number}> = (props) => {
 
 export default Seat
 
-//draggables must always be rendered in a droppable
+//check on movie how is coded destination div and its parameters
