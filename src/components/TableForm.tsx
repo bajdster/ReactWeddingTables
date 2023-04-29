@@ -2,6 +2,7 @@ import React, {useRef, useState, useContext, useEffect} from 'react'
 import classes from "./TableForm.module.scss"
 import {AiOutlineCloseSquare} from "react-icons/ai"
 import GuestContext from '../store/context-guest'
+import {v4 as uuidv4} from 'uuid'
 
 const TableForm:React.FC<{openTableFormHandler:()=> void}> = (props) => {
 
@@ -9,14 +10,14 @@ const TableForm:React.FC<{openTableFormHandler:()=> void}> = (props) => {
     const tableGuestAmount = useRef<HTMLInputElement>(null)
     const ctx = useContext(GuestContext)
 
-    const [seats, setSeats] =  useState<JSX.Element[]>([]);
+    const [seats, setSeats] =  useState<string[]>([]);
 
     const handleButtonClick = (e:React.FormEvent) => {
         e.preventDefault();
         const seatsValue = Number(tableGuestAmount.current?.value);
         // const table = String(tableName.current?.value);
 
-        const newSeats:JSX.Element[] = Array.from({ length: seatsValue }, (_, i) => <div key={i}>Div {i+1}</div>);
+        const newSeats:string[] = Array.from({ length: seatsValue }, (_, i) => "");
         console.log(newSeats)
         console.log(tableName)
         setSeats(newSeats);
@@ -31,7 +32,7 @@ const TableForm:React.FC<{openTableFormHandler:()=> void}> = (props) => {
             return;
         }
         const table = String(tableName.current?.value);
-        ctx.addTable({name: table, seats: seats})
+        ctx.addTable({name: table, seats: seats, id: uuidv4()})
 
       },[seats])
 

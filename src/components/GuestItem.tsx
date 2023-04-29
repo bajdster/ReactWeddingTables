@@ -1,13 +1,14 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { BsPersonCircle } from 'react-icons/bs'
 import classes from "./GuestItem.module.scss"
 import { Draggable } from 'react-beautiful-dnd'
+import GuestContext from '../store/context-guest'
 
 const GuestItem:React.FC<{guestContent:string, id:string, index:number}> = (props) => {
 
-    // let circleColor;
+  const ctx = useContext(GuestContext)
 
-    // if(props.content === "gues")
+  
 
    return (
     <Draggable draggableId={props.id} index={props.index}>
@@ -17,6 +18,8 @@ const GuestItem:React.FC<{guestContent:string, id:string, index:number}> = (prop
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
+          // onDragStart={()=>ctx.changeTableDrag(false)}
+          // onDragEnd={()=>ctx.changeTableDrag(true)}
 
         >
           <BsPersonCircle />

@@ -1,12 +1,17 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import classes from "./SquareTable.module.scss";
 import Table from "../models/Table";
 // import Half from "./Half";
 import {BiRefresh} from "react-icons/bi"
 import {AiFillDelete, AiFillEdit} from "react-icons/ai";
 import Seat from "./Seat";
+import GuestContext from "../store/context-guest";
 
-const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>}> = (props) => {
+
+const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>, id:string}> = (props) => {
+
+  const ctx = useContext(GuestContext)
+
   const seats = props.table.seats;
 
   console.log(seats)
@@ -54,6 +59,8 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
 
   useEffect(()=>
   {
+    // if(!ctx.canTableDrag) return
+    
     if(!tableRef.current || !props.hall.current) return;
 
     const table = tableRef.current;
@@ -82,15 +89,9 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
       const nextX = e.clientX - coords.current.startX + coords.current.lastX;
       const nextY = e.clientY - coords.current.startY + coords.current.lastY;
 
-      // const hallRect = hall.getBoundingClientRect();
-      // const tableRect = table.getBoundingClientRect();
-      // const maxX = hallRect.width - tableRect.width; 
-      // const maxY = hallRect.height - tableRect.height; 
 
       table.style.top = `${nextY}px`
       table.style.left = `${nextX}px`
-    //   table.style.left = `${Math.min(Math.max(nextX, 0), maxX)}px`;
-    // table.style.top = `${Math.min(Math.max(nextY, 0), maxY)}px`;
     }
 
     table.addEventListener('mousedown', onMouseDown)
@@ -123,20 +124,16 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
           // top: `${position.y}px`
         }}
         ref={tableRef}
-        // onMouseDown={handleMouseDown}
-        // onMouseMove={handleMouseMove}
-        // onMouseUp={handleMouseUp}
       >
-        {/* <Half half={firstHalf} name="first" /> */}
         
           <div className={classes.table}>
           <span>{props.table.name}</span>
           {seats.map((seat, index)=>
             {
-              return <Seat id={index} index={index}/>
+              return <Seat id={index} name={seat} tableId ={props.id}/>
             })}
           </div>
-        {/* <Half half={secondHalf} name="second" /> */}
+
 
         <div className={classes.options}>
           <button onClick={rotateTableHandler} style={{transform: `rotate(${rotation}deg)`}}><BiRefresh/></button>

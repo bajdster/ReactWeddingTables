@@ -2,7 +2,8 @@
 
 type Table = {
     name:  React.ReactNode;
-    seats: JSX.Element[]
+    seats: string[],
+    id: string
 }
 
 export default Table;

@@ -2,15 +2,18 @@
 
 .circle
 {
+    
     width:40px;
     height: 40px;
     border-radius: 50%;
     background-color: blanchedalmond;
     @include flexCenter;
     position: relative;
-    margin-right: 20px;
-    margin-bottom: 20px;
     box-shadow: 2px 2px 5px black;
+    z-index: 5000;
+    transform-style: preserve-3d;
+   
+
 
     .description
     {
@@ -22,3 +25,4 @@
         padding: 2px;
     }
 }
+

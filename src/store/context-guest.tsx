@@ -12,30 +12,41 @@ import Table from "../models/Table"
 //     children?: Children[]
 // }
 
+
 // type Table = {
-//     name: string | React.RefObject<HTMLInputElement>;
-//     seats: JSX.Element[]
+//     name:  React.ReactNode;
+//     seats: string[],
+//     id: string
 // }
 
+
+//still dont have a clue how to make that guestItem is movable and table stand still....
 
 type GuestContextObj = {
     guests: Guest[],
     tables: Table[],
-    addGuest: (guest:Guest) => void
-    addTable: (table:Table) => void
+    canTableDrag:boolean,
+    addGuest: (guest:Guest) => void,
+    addTable: (table:Table) => void,
+    updateTables: (tables:Table[]) => void,
+    changeTableDrag: (isDragPossibility:boolean) => void
 }
 
 const GuestContext = React.createContext<GuestContextObj>({
     guests: [],
     tables: [],
+    canTableDrag: true,
     addGuest: ()=> {},
-    addTable: () => {}
+    addTable: () => {},
+    updateTables: () => {},
+    changeTableDrag: ()=> {}
 })
 
 export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props) =>
 {
     const [guests, setGuests] = useState<Guest[]>([]);
     const [tables, setTables] = useState<Table[]>([]);
+    const [canTableDrag, setCanTableDrag] = useState<boolean>(true);
 
     useEffect(()=>
     {
@@ -95,6 +106,16 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
         })
     }
 
+    const updateTables = (tables:Table[]) =>
+    {
+        setTables(tables)
+    }
+
+    const changeTableDrag = (turn:boolean) =>
+    {
+        setCanTableDrag(turn)
+    }
+
     useEffect(()=>
     {
         console.log(guests)
@@ -103,8 +124,11 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
     const contextValue: GuestContextObj = {
         guests: guests,
         tables: tables,
+        canTableDrag: canTableDrag,
         addGuest: addGuest,
-        addTable: addTable
+        addTable: addTable,
+        updateTables: updateTables,
+        changeTableDrag: changeTableDrag,
     }
 
     return (

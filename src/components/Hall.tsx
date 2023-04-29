@@ -12,7 +12,7 @@ const Hall = () => {
     <main className={classes.main} ref={hallRef}>
         {ctx.tables.map(table=>
           {
-            return <SquareTable table ={table} hall={hallRef}/> 
+            return <SquareTable table ={table} hall={hallRef} id={table.id}/> 
           })}
     </main>
   )
