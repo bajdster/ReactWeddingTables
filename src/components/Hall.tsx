@@ -8,11 +8,14 @@ const Hall = () => {
   const ctx = useContext(GuestContext)
   const hallRef = useRef<HTMLDivElement>(null)
 
+  console.log(ctx.tables)
+
   return (
     <main className={classes.main} ref={hallRef}>
-        {ctx.tables.map(table=>
+        {ctx.tables.map((table, index)=>
           {
-            return <SquareTable table ={table} hall={hallRef} id={table.id}/> 
+            console.log("re-render tables")
+            return <SquareTable table ={table} hall={hallRef} id={table.id} key={index}/> 
           })}
     </main>
   )

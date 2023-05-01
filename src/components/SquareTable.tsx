@@ -14,7 +14,7 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
 
   const seats = props.table.seats;
 
-  console.log(seats)
+  // console.log(seats)
   // const half = Math.ceil(seats.length / 2);
 
   // const firstHalf = seats.slice(0, half);
@@ -33,24 +33,6 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
   // const [isDragging, setIsDragging] = useState(false);
 
   const [rotation, setRotation] = useState<number>(0);
-  // const [position, setPosition] = useState({ x: 0, y: 0 });
-
-  // const handleMouseDown = (e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   setIsDragging(true);
-  //   setPosition({ x: e.clientX, y: e.clientY });
-  // };
-
-  // const handleMouseMove = (e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   if (isDragging) {
-  //     const dx = e.clientX - position.x;
-  //     const dy = e.clientY - position.y;
-  //     setPosition({ x: position.x + dx, y: position.y + dy });
-  //   }
-  // };
-
-  // const handleMouseUp = () => {
-  //   setIsDragging(false);
-  // };
 
 
   const rotateTableHandler = () => {
@@ -59,90 +41,110 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
 
   useEffect(()=>
   {
-    // if(!ctx.canTableDrag) return
-    
-    if(!tableRef.current || !props.hall.current) return;
-
-    const table = tableRef.current;
-    const hall = props.hall.current; 
-
-    const onMouseDown = (e: MouseEvent) =>
+    if(ctx.canTableDrag)
     {
-      e.preventDefault()
-      isClicked.current = true;
-      coords.current.startX = e.clientX;
-      coords.current.startY = e.clientY;
+      if(!tableRef.current || !props.hall.current) return;
 
+      const table = tableRef.current;
+      const hall = props.hall.current; 
+      
+
+      const onMouseDown = (e: MouseEvent) =>
+      {
+        e.preventDefault()
+        isClicked.current = true;
+        coords.current.startX = e.clientX;
+        coords.current.startY = e.clientY;
+
+      }
+      const onMouseUp = (e: MouseEvent) =>
+      {
+        e.preventDefault()
+        isClicked.current = false;
+        coords.current.lastX = table.offsetLeft;
+        coords.current.lastY = table.offsetTop;
+      }
+      const onMouseMove = (e: MouseEvent) => {
+        e.preventDefault();
+        if (isClicked.current) {
+          if (!props.hall.current || !tableRef.current) return;
+      
+          const hall = props.hall.current;
+          const table = tableRef.current;
+      
+          if (!hall.contains(e.target as Node) || !table.contains(e.target as Node)) return;
+      
+          const nextX = e.clientX - coords.current.startX + coords.current.lastX;
+          const nextY = e.clientY - coords.current.startY + coords.current.lastY;
+      
+          table.style.top = `${nextY}px`;
+          table.style.left = `${nextX}px`;
+        }
+      };
+
+      
+      table.addEventListener('mousedown', onMouseDown)
+      table.addEventListener('mouseup', onMouseUp)
+      table.addEventListener('mousemove', onMouseMove)
+      table.addEventListener('mouseleave', onMouseUp);
+      // table.addEventListener('mouseover', onMouseUp)
+
+      const cleanup = () =>
+      {
+        table.removeEventListener('mousedown', onMouseDown)
+        table.removeEventListener('mouseup', onMouseUp)
+        table.removeEventListener('mousemove', onMouseMove)
+        table.removeEventListener('mouseleave', onMouseUp)
+        // table.addEventListener('mouseover', onMouseUp)
+      }
+      
+
+      return cleanup;
     }
-    const onMouseUp = (e: MouseEvent) =>
+      
+      
+    }, [ctx.canTableDrag])
+
+    //finally its help that after drop on Seat table doesnt follow cursor
+    //still problem when you drop on hall, table still walking
+    const onSeatMouseUp = (e: MouseEvent) =>
     {
+      // console.log("tu onmouseup ")
       e.preventDefault()
       isClicked.current = false;
-      coords.current.lastX = table.offsetLeft;
-      coords.current.lastY = table.offsetTop;
-    }
-    const onMouseMove = (e: MouseEvent) =>
-    {
-      e.preventDefault();
-      if(!isClicked.current) return
-
-      const nextX = e.clientX - coords.current.startX + coords.current.lastX;
-      const nextY = e.clientY - coords.current.startY + coords.current.lastY;
-
-
-      table.style.top = `${nextY}px`
-      table.style.left = `${nextX}px`
     }
 
-    table.addEventListener('mousedown', onMouseDown)
-    table.addEventListener('mouseup', onMouseUp)
-    hall.addEventListener('mousemove', onMouseMove)
-    hall.addEventListener('mouseleave', onMouseUp);
-
-    const cleanup = () =>
-    {
-      table.removeEventListener('mousedown', onMouseDown)
-      table.removeEventListener('mouseup', onMouseUp)
-      hall.removeEventListener('mousemove', onMouseMove)
-      hall.removeEventListener('mouseleave', onMouseUp)
-    }
-    
-
-    return cleanup;
-  }, [])
-
-
-  return (
-    <>
-      
-      <div
-        className={classes.tableBox}
-        style={{
-          width: seats.length / 2 * 60,
-          transform: `rotate(${rotation}deg)`
-          // left: `${position.x}px`,
-          // top: `${position.y}px`
-        }}
-        ref={tableRef}
-      >
+    return (
+      <>
         
-          <div className={classes.table}>
-          <span>{props.table.name}</span>
-          {seats.map((seat, index)=>
-            {
-              return <Seat id={index} name={seat} tableId ={props.id}/>
-            })}
+        <div
+          className={classes.tableBox}
+          style={{
+            width: seats.length / 2 * 60,
+            transform: `rotate(${rotation}deg)`
+            // left: `${position.x}px`,
+            // top: `${position.y}px`
+          }}
+          ref={tableRef}
+        >
+          
+            <div className={classes.table}>
+              <span>{props.table.name}</span>
+              {seats.map((seat, index)=>
+                {
+                  return <Seat id={index} key = {index} name={seat} tableId ={props.id} onMouseUpHandle={onSeatMouseUp}/>
+                })}
+            </div>
+
+
+          <div className={classes.options}>
+            <button onClick={rotateTableHandler} style={{transform: `rotate(${rotation}deg)`}}><BiRefresh/></button>
+            <button style={{transform: `rotate(${-rotation}deg)`}}><AiFillDelete/></button>
+            <button style={{transform: `rotate(${-rotation}deg)`}}><AiFillEdit/></button>
           </div>
-
-
-        <div className={classes.options}>
-          <button onClick={rotateTableHandler} style={{transform: `rotate(${rotation}deg)`}}><BiRefresh/></button>
-          <button style={{transform: `rotate(${-rotation}deg)`}}><AiFillDelete/></button>
-          <button style={{transform: `rotate(${-rotation}deg)`}}><AiFillEdit/></button>
         </div>
-      </div>
-    </>
-  );
+      </>
+    );
 };
 
 export default SquareTable;

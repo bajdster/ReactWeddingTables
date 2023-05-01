@@ -18,8 +18,6 @@ const TableForm:React.FC<{openTableFormHandler:()=> void}> = (props) => {
         // const table = String(tableName.current?.value);
 
         const newSeats:string[] = Array.from({ length: seatsValue }, (_, i) => "");
-        console.log(newSeats)
-        console.log(tableName)
         setSeats(newSeats);
 
         // ctx.addTable({name: table, seats: seats})

@@ -48,10 +48,6 @@ const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler}) =>
                   {ctx.guests.map((guest, index) => (
                     <React.Fragment key={`${guest.name}${index}`}>
                       <GuestItem guestContent = {guest.name} id={`${guest.name}`} index={index} />
-                      {/* {guest.partner && <GuestItem guestContent={guest.partner} id={`${guest.name}${index}`} index={index} />}
-                      {guest.children?.map((child, childIndex) => (
-                        <GuestItem guestContent={child.name} id={`${guest.name}${childIndex}`} index={childIndex} />
-                      ))} */}
                     </React.Fragment>
                   ))}
                   {provided.placeholder}

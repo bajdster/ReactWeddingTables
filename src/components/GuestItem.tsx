@@ -11,7 +11,7 @@ const GuestItem:React.FC<{guestContent:string, id:string, index:number}> = (prop
   
 
    return (
-    <Draggable draggableId={props.id} index={props.index}>
+    <Draggable draggableId={props.id} index={props.index} key={props.index}>
       {(provided:any) => (
         <li
           className={classes.circle}

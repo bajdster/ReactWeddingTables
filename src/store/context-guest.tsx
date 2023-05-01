@@ -55,7 +55,6 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
 
     const loadGuests = async () =>
     {
-        console.log("im working")
         const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/guests.json")
 
         const data = await response.json();
