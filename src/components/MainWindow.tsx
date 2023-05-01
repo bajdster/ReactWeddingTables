@@ -26,10 +26,10 @@ const MainWindow:React.FC = () => {
 
   const ctx = useContext(GuestContext)
 
-  const onDragStart = () =>
+  const onDragStart = (result:any) =>
   {
+    console.log(result.draggableId)
     ctx.changeTableDrag(false)
-    //lepiej ale jak się dropi dropa elementu ze stolu na inne miejsce to ten pojebany stół dalej chodzi.
   }
   
   const onDragEnd = (result:any) =>
@@ -44,6 +44,14 @@ const MainWindow:React.FC = () => {
           const idContent = destination.droppableId.split("_")
           const tableId:string = idContent[0]
           const seatIndex:number = idContent[1]
+
+          const sourceContent = source.droppableId.split("_")
+          const sourcetableId:string = sourceContent[0];
+          const previousAreaIndex:number = sourceContent[1];
+
+          const destinationContent = destination.droppableId.split("_");
+          const destinationTableId:string = destinationContent[0]
+          const nextAreaIndex:number = destinationContent[1];
           //now it is neccesary to iterate over tables and find that one by tableId and then from source gets properties and put this into seat which index is equal to index
           console.log(tableId)
           console.log(seatIndex)
@@ -87,17 +95,11 @@ const MainWindow:React.FC = () => {
             
           }
 
-          //sourcem jest jeden ze stołów
+          //sourcem jest jeden ze stołów a właściwie Seat
           else
           {
 
-            const sourceContent = source.droppableId.split("_")
-            const sourcetableId:string = sourceContent[0];
-            const previousAreaIndex = sourceContent[1];
-
-            const destinationContent = destination.droppableId.split("_");
-            const destinationTableId:string = destinationContent[0]
-            const nextAreaIndex = destinationContent[1];
+           
             
             //obręb jednego stołu
             if(sourcetableId === destinationTableId)
@@ -105,40 +107,48 @@ const MainWindow:React.FC = () => {
               
               const updatedTables = tables.map(table=>
                 {
-                  //znaleziono stolik 
+                  //znaleziono jeden z Seat ze ma id stołu
                   if(table.id === sourcetableId)
                   {
                     const newSeats = [...table.seats]
 
                     //przypadek gdy krzesło jest puste
-                    if(newSeats[nextAreaIndex]==="")
+                    if(newSeats[nextAreaIndex]==='')
                     {
                       newSeats[nextAreaIndex] = draggableId;
-                      newSeats[previousAreaIndex] ="";
+                      newSeats[previousAreaIndex] ='';
                       table = {...table, seats:newSeats}
                     }
-                    
-                    //ale jest jakiś trop, warining że nie znaleziono draggable z nową wartością
-                    //przy zamianie nagle jeden z nich traci draggable - magia!
-                    //KURWA JEBANA W DUPE PIERDOLONA MA
+
                     //przypadek gdy krzesło nie jest puste
-                    else
+
+                    else if (newSeats[nextAreaIndex]!=='' && newSeats[nextAreaIndex]!==draggableId)
                     {
-                      // console.log("chuj zelki i bombelki")
-                      const previousSeatContent = newSeats[nextAreaIndex]
-                      newSeats[nextAreaIndex] = "";
-                      newSeats[previousAreaIndex] ="";
-                      newSeats[previousAreaIndex] = previousSeatContent;
+                      console.log("chuj zelki i bombelki")
+                      const previousSeatContent = newSeats[nextAreaIndex].toString()
+                      // console.log(typeof previousSeatContent)
+                      // newSeats[nextAreaIndex] = "";
+                      // newSeats[previousAreaIndex] ="";
                       newSeats[nextAreaIndex] = draggableId;
+
+                      newSeats[previousAreaIndex] = previousSeatContent;
+                      
+
+                      console.log(newSeats)
                       table={...table, seats:newSeats}
 
                       // console.log(previousSeatContent)
                       // guests.splice(guests.length, 0, {name: previousSeatContent, id: uuidv4()})
                     }
 
-                    
+                    return table
                   }
-                  return table
+
+                  else
+                  {
+                    return table
+                  }
+                  
                 })
 
                 ctx.updateTables(updatedTables)
@@ -243,7 +253,7 @@ const MainWindow:React.FC = () => {
     ctx.changeTableDrag(true)
   }
  
-
+console.log(ctx.tables)
 
     //continue with btf dnd library
   return (

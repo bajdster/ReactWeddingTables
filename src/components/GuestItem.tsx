@@ -8,19 +8,15 @@ const GuestItem:React.FC<{guestContent:string, id:string, index:number}> = (prop
 
   const ctx = useContext(GuestContext)
 
-  
-
+//whole secret was using key as draggableId in draggable
    return (
-    <Draggable draggableId={props.id} index={props.index} key={props.index}>
+    <Draggable draggableId={props.id} index={props.index} key={props.id}>
       {(provided:any) => (
         <li
           className={classes.circle}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          // onDragStart={()=>ctx.changeTableDrag(false)}
-          // onDragEnd={()=>ctx.changeTableDrag(true)}
-
         >
           <BsPersonCircle />
           <div className={classes.description}>{props.guestContent}</div>
