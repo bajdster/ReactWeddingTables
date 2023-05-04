@@ -66,7 +66,7 @@ const MainWindow:React.FC = () => {
 
           //need to add possibility to drop 
           
-
+        //from lobby to tables
           if(source.droppableId === "asideMenu")
           {
             //wszelki ruch w obrębie asideMenu
@@ -113,7 +113,9 @@ const MainWindow:React.FC = () => {
           else
           {
             //przypadek gdy ze stołu chcemy zdjąć gościa z powrotem do lobby
-            if(sourcetableId !== "asideMenu" && destinationTableId === "asideMenu")
+
+            //something still wrong, when back to lobby and seat again it creates empty GuestItem in lobby
+            if(destinationTableId === "asideMenu")
             {
               const updatedTable = tables.map(table=>
                 {
