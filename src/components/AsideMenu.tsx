@@ -47,7 +47,7 @@ const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler}) =>
                 <ul className={classes.guestListBox} ref={provided.innerRef} {...provided.droppableProps}>
                   {ctx.guests.map((guest, index) => (
                     <React.Fragment key={`${guest.name}${index}`}>
-                      <GuestItem guestContent = {guest.name} id={`${guest.name}`} index={index} />
+                      <GuestItem guestContent = {guest.name} id={guest.name} index={index} />
 
                     </React.Fragment>
                   ))}

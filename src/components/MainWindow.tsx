@@ -6,7 +6,8 @@ import classes from "./MainWindow.module.scss"
 import TableForm from './TableForm';
 import GuestContext from '../store/context-guest';
 import {DragDropContext} from "react-beautiful-dnd";
-import {v4 as uuidv4} from 'uuid'
+import {v4 as uuidv4} from 'uuid';
+import Table from '../models/Table';
 
 
 
@@ -68,7 +69,10 @@ const MainWindow:React.FC = () => {
 
           if(source.droppableId === "asideMenu")
           {
-            add = guests[source.index]
+            //wszelki ruch w obrębie asideMenu
+            if(destinationTableId === "asideMenu") return;
+            
+            //  add = guests[source.index]
             guests.splice(source.index, 1)
 
             const updatedTables = tables.map(table=>
@@ -76,10 +80,20 @@ const MainWindow:React.FC = () => {
                 if(table.id === tableId)
                 {
                   const newSeats = [...table.seats]
-
-                  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-                  newSeats[seatIndex] = draggableId;
-                  table = {...table, seats:newSeats}
+                  if(newSeats[nextAreaIndex] === "")
+                  {
+                    newSeats[nextAreaIndex] = draggableId;
+                    table = {...table, seats:newSeats}
+                  }
+                  //podmiana gościa z lobby z gościem który zajął miejsce
+                  else 
+                  {
+                    const previousSeatValue = newSeats[nextAreaIndex];
+                    newSeats[nextAreaIndex] = draggableId;
+                    table = {...table, seats:newSeats}
+                    guests.splice(guests.length, 0, {name: previousSeatValue, id:uuidv4()})
+                  }
+                  
                   // console.log(table.seats)
                   return table
                 }
@@ -98,17 +112,37 @@ const MainWindow:React.FC = () => {
           //sourcem jest jeden ze stołów a właściwie Seat
           else
           {
+            //przypadek gdy ze stołu chcemy zdjąć gościa z powrotem do lobby
+            if(sourcetableId !== "asideMenu" && destinationTableId === "asideMenu")
+            {
+              const updatedTable = tables.map(table=>
+                {
+                  if(table.id === sourcetableId)
+                  {
+                    const newSeats = [...table.seats]
+                    newSeats[previousAreaIndex] = '';
+                    table = {...table, seats: newSeats}
+                    guests.splice(guests.length, 0, {name: draggableId, id:uuidv4()})
+                    return table
+                  }
+                
+                  else return table
+                 
+                  
+                })
 
-           
-            
+                ctx.updateTables(updatedTable)
+            }
+
+
             //obręb jednego stołu
             if(sourcetableId === destinationTableId)
             {
-              
+             
               const updatedTables = tables.map(table=>
                 {
                   //znaleziono jeden z Seat ze ma id stołu
-                  if(table.id === sourcetableId)
+                  if(table.id === destinationTableId)
                   {
                     const newSeats = [...table.seats]
 
@@ -124,7 +158,7 @@ const MainWindow:React.FC = () => {
 
                     else if (newSeats[nextAreaIndex]!=='' && newSeats[nextAreaIndex]!==draggableId)
                     {
-                      console.log("chuj zelki i bombelki")
+                      
                       const previousSeatContent = newSeats[nextAreaIndex].toString()
                       // console.log(typeof previousSeatContent)
                       // newSeats[nextAreaIndex] = "";
@@ -137,13 +171,12 @@ const MainWindow:React.FC = () => {
                       console.log(newSeats)
                       table={...table, seats:newSeats}
 
-                      // console.log(previousSeatContent)
-                      // guests.splice(guests.length, 0, {name: previousSeatContent, id: uuidv4()})
                     }
 
                     return table
                   }
 
+                  
                   else
                   {
                     return table
@@ -154,97 +187,46 @@ const MainWindow:React.FC = () => {
                 ctx.updateTables(updatedTables)
             }
 
-            else
+            //sourcem jest jeden ze stołów ale destination jest inny stół
+            else if(sourcetableId !== destinationTableId)
             {
-              console.log("inny stół")
+              const sourceTableValue:string = draggableId;
+              const sourceTableValueIndex:number = previousAreaIndex;
+              let destinationTableValue: string;
+              const destinationTableValueIndex = nextAreaIndex;
+
+              const tempTables = [...tables];
+              tempTables.map(table=>
+                {
+                  if(table.id === destinationTableId)
+                  {
+                    destinationTableValue = table.seats[destinationTableValueIndex]
+                    table.seats[destinationTableValueIndex] = sourceTableValue;
+                  }
+
+                  else return table
+                })
+                tempTables.map(table=>
+                  {
+                    if(table.id === sourcetableId)
+                    {
+                      table.seats[sourceTableValueIndex] = destinationTableValue;
+                    }
+                    else return table;
+                  })
+              
+                  ctx.updateTables(tempTables);
+
             }
 
-            // const updatedTables = tables.map(table=>
-            //   {
-            //     //szukanie stołu który jest zgodny z source
-            //     if(table.id === sourcetableId)
-            //     {
-            //       const newSeats = [...table.seats]
-
-            //       //when you drop on occupied seat
-
-            //       //works but you cannot drag previous seat.........FUCK
-            //       if(destination && destination.droppableId !== "" )
-            //       {
-            //         // console.log("zamiana")
-            //         // const prevContent = newSeats[nextAreaIndex]
-            //         // const prevIndex = nextAreaIndex;
-
-            //         // const nextContent = draggableId
-            //         // const nextIndex = previousAreaIndex
-
-            //         // newSeats[prevIndex] = nextContent;
-            //         // newSeats[nextIndex] = prevContent;
-
-            //         // table = {...table, seats:newSeats}
-            //       }
-            
-            //           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-
-            //           const prevContent = newSeats[nextAreaIndex]
-            //           newSeats[previousAreaIndex] = '';
-            //           newSeats[nextAreaIndex] = draggableId;
-            //           table = {...table, seats:newSeats}
-
-            //       return table
-            //     }
-
-            //     //works but double the guest on both tables........................................
-            //     //NIC TU KURWA NIE DZIALA JAPRIERDOLE !
-            
-                
-            //     else if(table.id === destinationTableId)
-            //     {
-            //         const updatedTables = ctx.tables.map(prevTable=>
-            //           {
-            //             if(prevTable.id === sourcetableId)
-            //             {
-            //               console.log(table.id)
-            //               const newSeats = [...prevTable.seats]
-            //               newSeats[previousAreaIndex] = '';
-            //               prevTable = {...prevTable, seats:newSeats}
-                        
-            //             }
-            //             return prevTable
-            //           })
-
-            //           ctx.updateTables(updatedTables)
-                    
-
-            //         const newSeats = [...table.seats]
-            //         const prevContent = newSeats[nextAreaIndex]
-            //         // newSeats[previousAreaIndex] = '';
-            //         newSeats[nextAreaIndex] = draggableId;
-            //         table = {...table, seats:newSeats}
-
-                    
-
-            //         return table
-            //     }
-              
-
-              
-            //     else
-            //     {
-            //       return table;
-            //     }
-
-            
-                
-            //   })
-            //   ctx.updateTables(updatedTables)
-
           }
+          
     }
 
     else
     {
       console.log("no destination")
+      ctx.changeTableDrag(true)
     }
 
    

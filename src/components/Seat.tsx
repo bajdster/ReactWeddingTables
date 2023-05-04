@@ -12,7 +12,7 @@ const Seat:React.FC<{id:number, name: string, tableId:string, onMouseUpHandle:(e
           (provided:any)=>(
             <div className={classes.seat} ref={provided.innerRef}{...provided.droppableProps}
             onMouseUp={props.onMouseUpHandle}>
-            {props.name!=="" && <GuestItem guestContent={props.name} id={props.name} index={props.id}/>}
+            {props.name && <GuestItem guestContent={props.name} id={props.name} index={props.id}/>}
               
             {provided.placeholder} 
             </div>

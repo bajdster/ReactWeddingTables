@@ -26,6 +26,7 @@
         height: 100%;
         @include flexCenter;
         flex-wrap: wrap;
+        border-radius: 2px;
 
         span
         {
