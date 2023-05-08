@@ -3,7 +3,7 @@ import classes from "./Seat.module.scss";
 import { Droppable } from 'react-beautiful-dnd';
 import GuestItem from './GuestItem';
 
-const Seat:React.FC<{id:number, name: string, tableId:string, onGuestSeatHandle:(e:MouseEvent)=> void}> = (props) => {
+const Seat:React.FC<{id:number, name: string, tableId:string, onGuestSeatHandle:(e:MouseEvent)=> void, style:{}}> = (props) => {
 
   return (
     <Droppable droppableId={`${props.tableId}_${props.id}`}>
@@ -11,7 +11,7 @@ const Seat:React.FC<{id:number, name: string, tableId:string, onGuestSeatHandle:
           
           (provided:any)=>(
             <div className={classes.seat} ref={provided.innerRef}{...provided.droppableProps}
-            >
+            style={props.style}>
             {props.name && <GuestItem guestContent={props.name} id={props.name} index={props.id} onGuestSeatHandler = {props.onGuestSeatHandle}/>}
               
             {provided.placeholder} 

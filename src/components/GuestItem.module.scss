@@ -24,5 +24,12 @@
         border-radius: 5px;
         padding: 2px;
     }
+
+    &:active
+    {
+        opacity: 0.5;
+    }
 }
+
+
 
