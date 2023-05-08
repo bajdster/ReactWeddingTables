@@ -29,7 +29,6 @@ const MainWindow:React.FC = () => {
 
   const onDragStart = (result:any) =>
   {
-    console.log(result.draggableId)
     ctx.changeTableDrag(false)
   }
   
@@ -113,8 +112,6 @@ const MainWindow:React.FC = () => {
           else
           {
             //przypadek gdy ze stołu chcemy zdjąć gościa z powrotem do lobby
-
-            //something still wrong, when back to lobby and seat again it creates empty GuestItem in lobby
             if(destinationTableId === "asideMenu")
             {
               const updatedTable = tables.map(table=>
@@ -228,7 +225,6 @@ const MainWindow:React.FC = () => {
     else
     {
       console.log("no destination")
-      ctx.changeTableDrag(true)
     }
 
    

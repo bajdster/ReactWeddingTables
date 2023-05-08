@@ -4,7 +4,7 @@ import classes from "./GuestItem.module.scss"
 import { Draggable } from 'react-beautiful-dnd'
 import GuestContext from '../store/context-guest'
 
-const GuestItem:React.FC<{guestContent:string, id:string, index:number}> = (props) => {
+const GuestItem:React.FC<{guestContent:string, id:string, index:number, onGuestSeatHandler?: (e:MouseEvent)=> void}> = (props) => {
 
   const ctx = useContext(GuestContext)
 
@@ -17,6 +17,7 @@ const GuestItem:React.FC<{guestContent:string, id:string, index:number}> = (prop
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
+          onMouseDown={props.onGuestSeatHandler}
         >
           <BsPersonCircle />
           <div className={classes.description}>{props.guestContent}</div>

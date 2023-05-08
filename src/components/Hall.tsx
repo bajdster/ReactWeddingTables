@@ -14,7 +14,6 @@ const Hall = () => {
     <main className={classes.main} ref={hallRef}>
         {ctx.tables.map((table, index)=>
           {
-            console.log("re-render tables")
             return <SquareTable table ={table} hall={hallRef} id={table.id} key={index}/> 
           })}
     </main>
