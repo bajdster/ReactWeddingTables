@@ -1,11 +1,38 @@
 @import "../index.scss";
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lily+Script+One&family=Nova+Oval&display=swap');
 
 .asideMenu
 {
     width:400px;
     height:100%;
     box-shadow: 1px 1px 1px black;
-    border-top:1px solid grey;
+    font-family: 'Bebas Neue', cursive;
+    position: relative;
+
+    
+    &.menuClosed
+    {
+    width: 5px;
+    // transform: translateX(-220px);
+    }
+
+
+    
+    .showMenu
+    {
+        z-index: 4000;
+        width:40px;
+        height: 40px;
+        border-radius: 50%;
+        @include flexCenter;
+        box-shadow: 1px 1px 3px black;
+        background-color: white;
+        position: absolute;
+        right:-30px;
+        top:40%;
+        transform: translateY(-25%);
+
+    }
 
     .tables
     {
@@ -83,4 +110,9 @@
             overflow-y: scroll;
         }
     }
+}
+
+.dragActive
+{
+    background-color: rgb(193, 192, 192);
 }

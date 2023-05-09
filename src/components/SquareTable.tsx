@@ -129,7 +129,7 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
         >
           
             <div className={classes.table}>
-              <span>{props.table.name}</span>
+              <span style={{transform: `rotate(${-rotation}deg)`}}>{props.table.name}</span>
               {seats.map((seat, index)=>
                 {
                   return <Seat id={index} key = {index} name={seat} tableId ={props.id} onGuestSeatHandle={onSeatMouseUp} style={{transform: `rotate(${-rotation}deg)`}}/>

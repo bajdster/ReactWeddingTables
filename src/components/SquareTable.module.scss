@@ -26,11 +26,17 @@
         height: 100%;
         @include flexCenter;
         flex-wrap: wrap;
-        border-radius: 2px;
+        border-radius: 5px;
+        box-shadow: 1px 0px 5px black;
 
         span
         {
             position: absolute;
+            color:$base-color;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 100;
+            top:-26px;
         }
     }
 

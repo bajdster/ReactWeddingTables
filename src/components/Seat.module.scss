@@ -5,12 +5,22 @@
     width:40px;
     height: 40px;
     border-radius: 50%;
-    background-color: $base-color;
+    background-color: rgb(218, 193, 123);;
+    // border: 2px solid $base-color;
     @include flexCenter;
     margin-left:10px;
     margin-right: 10px;
-    // z-index: 2;
+    z-index: 2;
     box-sizing: border-box;
     box-shadow: 2px 2px 10px black;
-    
+        
+  
+
+}
+
+.dragActive
+{
+    background-color: rgb(74, 179, 253);
+    border: 2px solid white;
+    box-shadow: 2px 2px 10px rgb(78, 78, 245);
 }

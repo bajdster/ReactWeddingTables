@@ -1,4 +1,6 @@
 @import "../index.scss";
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lily+Script+One&family=Nova+Oval&display=swap');
+
 
 .circle
 {
@@ -6,7 +8,9 @@
     width:40px;
     height: 40px;
     border-radius: 50%;
-    background-color: blanchedalmond;
+    background-color: $base-color;
+    color:white;
+    font-size: 24px;
     @include flexCenter;
     position: relative;
     box-shadow: 2px 2px 5px black;
@@ -20,9 +24,13 @@
         position: absolute;
         bottom:-15px;
         background-color: white;
+        @include flexCenter;
+        color:black;
+        font-size: 16px;
         border: 1px solid black;
         border-radius: 5px;
         padding: 2px;
+        font-family: 'Bebas Neue', cursive;
     }
 
     &:active

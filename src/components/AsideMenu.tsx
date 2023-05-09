@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { MdTableBar, MdTableRestaurant } from "react-icons/md";
+import React, { useContext, useState } from "react";
+import { MdTableBar, MdTableRestaurant, MdOutlineMenuOpen } from "react-icons/md";
 import GuestContext from "../store/context-guest";
 import GuestItem from "./GuestItem";
 import { Droppable } from 'react-beautiful-dnd';
@@ -13,16 +13,28 @@ interface Props {
 
 const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler}) => {
   const ctx = useContext(GuestContext);
+  const [isMenuClosed, setIsMenuClosed] = useState<boolean>(false)
 
   const addSquareTable = () =>
   {
     openTableFormHandler();
   }
 
+  const menuCloseHandler = () =>
+  {
+    setIsMenuClosed((prev)=>
+    {
+      return !prev;
+    })
+  }
+
   return (
     
-        <aside className={classes.asideMenu}>
+        <aside className={`${classes.asideMenu} ${isMenuClosed? classes.menuClosed : ""}`}>
           
+            <div className={classes.showMenu} onClick={menuCloseHandler}>
+              <MdOutlineMenuOpen/>
+            </div>
             
                 
                 <div className={classes.tables}>
@@ -37,14 +49,14 @@ const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler}) =>
               
               <Droppable droppableId="asideMenu">
                 {
-              (provided:any)=>(
+              (provided:any, snapshot:any)=>(
               <div className={classes.guestList}>
                 <div className={classes.guestAdd}>
                   <h3>Guest list</h3>
                   <button onClick={openFormHandler}>Add Guest</button>
                 </div>
                 
-                <ul className={classes.guestListBox} ref={provided.innerRef} {...provided.droppableProps}>
+                <ul className={`${classes.guestListBox} ${snapshot.isDraggingOver?classes.dragActive: ''}`} ref={provided.innerRef} {...provided.droppableProps}>
                   {ctx.guests.map((guest, index) => (
                     <React.Fragment key={`${guest.name}${index}`}>
                       {guest.name && <GuestItem guestContent = {guest.name} id={guest.name} index={index} />}

@@ -9,8 +9,8 @@ const Seat:React.FC<{id:number, name: string, tableId:string, onGuestSeatHandle:
     <Droppable droppableId={`${props.tableId}_${props.id}`}>
         {
           
-          (provided:any)=>(
-            <div className={classes.seat} ref={provided.innerRef}{...provided.droppableProps}
+          (provided:any, snapshot:any)=>(
+            <div className={`${classes.seat} ${snapshot.isDraggingOver?classes.dragActive: ''}`} ref={provided.innerRef}{...provided.droppableProps}
             style={props.style}>
             {props.name && <GuestItem guestContent={props.name} id={props.name} index={props.id} onGuestSeatHandler = {props.onGuestSeatHandle}/>}
               
