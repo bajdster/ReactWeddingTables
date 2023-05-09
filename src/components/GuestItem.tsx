@@ -1,45 +1,51 @@
-import React, {useContext, useState} from 'react'
-import { BsPersonCircle } from 'react-icons/bs'
-import classes from "./GuestItem.module.scss"
-import { Draggable } from 'react-beautiful-dnd'
-import GuestContext from '../store/context-guest'
+import React, { useContext, useState } from 'react';
+import { BsPersonCircle } from 'react-icons/bs';
+import classes from './GuestItem.module.scss';
+import { Draggable } from 'react-beautiful-dnd';
+import GuestContext from '../store/context-guest';
 
-const GuestItem:React.FC<{guestContent:string, id:string, index:number, onGuestSeatHandler?: (e:MouseEvent)=> void}> = (props) => {
+const GuestItem: React.FC<{
+  guestContent: string;
+  id: string;
+  index: number;
+  onGuestSeatHandler?: (e: MouseEvent) => void;
+}> = (props) => {
+  const ctx = useContext(GuestContext);
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
 
-  const ctx = useContext(GuestContext)
-  const [visible, setVisible] = useState<{}>()
-  
+  const dragStartHandler = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+    setMouseOffset({ x: offsetX, y: offsetY });
 
-  const dragFunction = (e: MouseEvent) => {
-    console.log('drag is rolling');
     if (props.onGuestSeatHandler) {
-      props.onGuestSeatHandler(e);
+      props.onGuestSeatHandler(e.nativeEvent);
     }
-    // setVisible({visibility: 'hidden'})
   };
 
-
-
-//whole secret was using key as draggableId in draggable
-   return (
+  return (
     <Draggable draggableId={props.id} index={props.index} key={props.id}>
-      {(provided:any) => (
+      {(provided: any) => (
         <li
           className={classes.circle}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          onMouseDown={dragFunction}
-          style = {{...provided.draggableProps.style, ...visible}}
+          onMouseDown={dragStartHandler}
+          style={{
+            ...provided.draggableProps.style,
+            // position: 'fixed',
+            top: provided.draggableProps.style.y - mouseOffset.y,
+            left: provided.draggableProps.style.x - mouseOffset.x,
+          }}
         >
           <BsPersonCircle />
           <div className={classes.description}>{props.guestContent}</div>
         </li>
       )}
     </Draggable>
-  )
-}
+  );
+};
 
-export default GuestItem
-
-//problem z umiejscowieniem GuestItem przt drag ma zwiazek z przesuwaniem table
+export default GuestItem;
