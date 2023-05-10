@@ -118,41 +118,35 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
 
     const deleteTableHandler = ()=>
     {
-      const searchedTable = tables.filter(table=>
-        {
-          return table.id === props.id
-        })
-
-
-        const tableGuests = searchedTable[0].seats.filter(seat=>
+      let confirm = window.confirm("Do you really want to delete this table?")
+      if(confirm)
+      {
+        const searchedTable = tables.filter(table=>
           {
-            return seat!==''
+            return table.id === props.id
           })
-
-        const guestToLobby = tableGuests.map(guest=>
-          {
-            return {name:guest, id: uuidv4()}
-          })
-
-          guests = [...guests, ...guestToLobby] 
-
-          const filteredTables = tables.filter(table=>
+  
+  
+          const tableGuests = searchedTable[0].seats.filter(seat=>
             {
-              return table.id !== props.id
+              return seat!==''
             })
-          ctx.updateGuests(guests)
-          ctx.updateTables(filteredTables)
-
-
-
-        // tableGuests.forEach(guest=>
-        //   {
-        //       // return {name:guest, id: uuidv4()}
-        //       guests.splice(guests.length, 0, {name:guest, id:uuidv4()})
-        //   })
-
-          // guests = [...guests, ...guestsToLobby]
-          // guests.splice()
+  
+          const guestToLobby = tableGuests.map(guest=>
+            {
+              return {name:guest, id: uuidv4()}
+            })
+  
+            guests = [...guests, ...guestToLobby] 
+  
+            const filteredTables = tables.filter(table=>
+              {
+                return table.id !== props.id
+              })
+            ctx.updateGuests(guests)
+            ctx.updateTables(filteredTables)
+      }
+      
     }
 
     return (

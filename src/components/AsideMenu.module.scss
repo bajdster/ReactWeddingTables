@@ -3,7 +3,7 @@
 
 .asideMenu
 {
-    width:400px;
+    width:350px;
     height:100%;
     box-shadow: 1px 1px 1px black;
     font-family: 'Bebas Neue', cursive;
@@ -12,8 +12,8 @@
     
     &.menuClosed
     {
-    width: 5px;
-    // transform: translateX(-220px);
+        width: 1px;
+        // transform: translateX(-220px);
     }
 
 
@@ -31,6 +31,12 @@
         right:-30px;
         top:40%;
         transform: translateY(-25%);
+
+        &:hover
+        {
+            cursor: pointer;
+            box-shadow: 1px 1px 7px black;
+        }
 
     }
 

@@ -1,18 +1,26 @@
-.main
-{
-    width:2000px;
-    min-height: 100%;
-    overflow: scroll;
-    // background-color: rgb(60, 60, 60);
+// .main
+// {
+//     width:2000px;
+//     // min-height: 100%;
+//     min-height: 1000px;
+//     overflow: scroll;
+//     // background-color: rgb(60, 60, 60);
+//     background-image: url('../images/floor5.jpg');
+//     box-sizing: border-box;
+//     position: relative;
+//     // flex-wrap: wrap;
+//     // resize: both;
+// }
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+  }
+  
+  .main {
+    width: 2000px;
+    min-height: 4000px;
     background-image: url('../images/floor5.jpg');
-    // background-size: contain;
-    // padding:50px;
-    box-sizing: border-box;
-    // display: flex;
-    // align-items: center;
-    // justify-content: center;
     position: relative;
-    // flex-wrap: wrap;
-    box-sizing: border-box;
-    // resize: both;
-}
+  }
