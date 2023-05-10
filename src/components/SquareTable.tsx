@@ -6,11 +6,13 @@ import {BiRefresh} from "react-icons/bi"
 import {AiFillDelete, AiFillEdit} from "react-icons/ai";
 import Seat from "./Seat";
 import GuestContext from "../store/context-guest";
+import {v4 as uuidv4} from 'uuid';
 
 
 const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>, id:string}> = (props) => {
 
   const ctx = useContext(GuestContext)
+  let tables = ctx.tables, guests = ctx.guests
 
   const seats = props.table.seats;
 
@@ -114,6 +116,45 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
       isClicked.current = false;
     }
 
+    const deleteTableHandler = ()=>
+    {
+      const searchedTable = tables.filter(table=>
+        {
+          return table.id === props.id
+        })
+
+
+        const tableGuests = searchedTable[0].seats.filter(seat=>
+          {
+            return seat!==''
+          })
+
+        const guestToLobby = tableGuests.map(guest=>
+          {
+            return {name:guest, id: uuidv4()}
+          })
+
+          guests = [...guests, ...guestToLobby] 
+
+          const filteredTables = tables.filter(table=>
+            {
+              return table.id !== props.id
+            })
+          ctx.updateGuests(guests)
+          ctx.updateTables(filteredTables)
+
+
+
+        // tableGuests.forEach(guest=>
+        //   {
+        //       // return {name:guest, id: uuidv4()}
+        //       guests.splice(guests.length, 0, {name:guest, id:uuidv4()})
+        //   })
+
+          // guests = [...guests, ...guestsToLobby]
+          // guests.splice()
+    }
+
     return (
       <>
         
@@ -139,7 +180,7 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
 
           <div className={classes.options}>
             <button onClick={rotateTableHandler} style={{transform: `rotate(${rotation}deg)`}}><BiRefresh/></button>
-            <button style={{transform: `rotate(${-rotation}deg)`}}><AiFillDelete/></button>
+            <button style={{transform: `rotate(${-rotation}deg)`}} onClick={deleteTableHandler}><AiFillDelete/></button>
             <button style={{transform: `rotate(${-rotation}deg)`}}><AiFillEdit/></button>
           </div>
         </div>
