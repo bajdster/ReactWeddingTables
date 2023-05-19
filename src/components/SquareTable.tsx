@@ -1,26 +1,25 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
+import React, { useRef, useState, useEffect, useContext} from "react";
+import { createPortal } from "react-dom";
 import classes from "./SquareTable.module.scss";
 import Table from "../models/Table";
-// import Half from "./Half";
 import {BiRefresh} from "react-icons/bi"
 import {AiFillDelete, AiFillEdit} from "react-icons/ai";
 import Seat from "./Seat";
 import GuestContext from "../store/context-guest";
 import {v4 as uuidv4} from 'uuid';
+import {AiOutlineCloseSquare} from "react-icons/ai"
+
+import ChangeTableNameForm from "./ChangeTableNameForm"
 
 
 const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>, id:string}> = (props) => {
 
   const ctx = useContext(GuestContext)
+  const [isTableNameFormOpen, setIsTableNameFormOpen] = useState<boolean>(false)
+  const [newTableName, setNewTableName] = useState<string | number>(props.table.name)
   let tables = ctx.tables, guests = ctx.guests
 
   const seats = props.table.seats;
-
-  // console.log(seats)
-  // const half = Math.ceil(seats.length / 2);
-
-  // const firstHalf = seats.slice(0, half);
-  // const secondHalf = seats.slice(half);
 
   const tableRef = useRef<HTMLDivElement>(null);
   const isClicked = useRef<boolean>(false);
@@ -32,9 +31,10 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
     lastY: number
   }>({startX:0, startY: 0, lastX: 0, lastY:0})
 
-  // const [isDragging, setIsDragging] = useState(false);
 
   const [rotation, setRotation] = useState<number>(0);
+
+
 
 
   const rotateTableHandler = () => {
@@ -149,22 +149,80 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
       
     }
 
+    const openEditTableNameForm = () =>
+    {
+      setIsTableNameFormOpen((prev)=>
+      {
+        return !prev;
+      })
+    }
+
+    const changeNewTableName = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNewTableName(e.target.value);
+    };
+    
+    const changeTableName = (e: React.FormEvent) => {
+      e.preventDefault();
+      // console.log(newTableName);
+
+      const updatedTables = tables.map(table=>
+        {
+          if(table.id === props.id)
+          {
+            table.name = newTableName;
+            return table
+          }
+          else return table
+        })
+
+        ctx.updateTables(updatedTables)
+        openEditTableNameForm()
+    };
+
+    //didnt work turn on input and edit name
     return (
       <>
-        
+      {isTableNameFormOpen && (
+                <div className={classes.tableNameFormModal}>  
+               
+                  <form className={classes.tableNameForm} onSubmit={changeTableName} style={{top:`${coords.current.lastY}px`}}>
+
+                  <div className={classes.closeButton}>
+                    <AiOutlineCloseSquare onClick = {openEditTableNameForm}/>
+                  </div>
+                    <input type="text" defaultValue={newTableName} onChange={changeNewTableName} />
+                    <button>Change name</button>
+                  </form>
+                </div>)}
+
         <div
           className={classes.tableBox}
           style={{
             width: seats.length / 2 * 60,
             transform: `rotate(${rotation}deg)`
-            // left: `${position.x}px`,
-            // top: `${position.y}px`
           }}
           ref={tableRef}
         >
           
             <div className={classes.table}>
-              <span style={{transform: `rotate(${-rotation}deg)`}}>{props.table.name}</span>
+              <span style={{transform: `rotate(${-rotation}deg)`}}>
+              {props.table.name}
+              </span>
+              {/* {isTableNameFormOpen && 
+                (<ChangeTableNameForm
+                  changeTableName={changeTableName}
+                  changeNewTableName={changeNewTableName}
+                  newTableName={newTableName}
+                />)
+              } */}
+              {/* {
+                <ChangeTableNameForm
+                changeTableName={changeTableName}
+                changeNewTableName={changeNewTableName}
+                newTableName={newTableName}
+                isTableNameFormOpen = {isTableNameFormOpen}
+              />
+              } */}
               {seats.map((seat, index)=>
                 {
                   return <Seat id={index} key = {index} name={seat} tableId ={props.id} onGuestSeatHandle={onSeatMouseUp} style={{transform: `rotate(${-rotation}deg)`}}/>
@@ -175,7 +233,7 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
           <div className={classes.options}>
             <button onClick={rotateTableHandler} style={{transform: `rotate(${rotation}deg)`}}><BiRefresh/></button>
             <button style={{transform: `rotate(${-rotation}deg)`}} onClick={deleteTableHandler}><AiFillDelete/></button>
-            <button style={{transform: `rotate(${-rotation}deg)`}}><AiFillEdit/></button>
+            <button style={{transform: `rotate(${-rotation}deg)`}} onClick ={openEditTableNameForm}><AiFillEdit/></button>
           </div>
         </div>
       </>

@@ -14,7 +14,7 @@
     @include flexCenter;
     position: relative;
     box-shadow: 2px 2px 5px black;
-    z-index: 2000;
+    z-index: 1000;
     transform-style: preserve-3d;
    
 
@@ -22,14 +22,15 @@
     .description
     {
         position: absolute;
-        bottom:-15px;
+        bottom:-20px;
         background-color: white;
         @include flexCenter;
         color:black;
-        font-size: 16px;
+        font-size: 12px;
         border: 1px solid black;
-        border-radius: 5px;
-        padding: 2px;
+        border-radius: 3px;
+        padding-left: 2px;
+        padding-right: 2px;
         font-family: 'Bebas Neue', cursive;
     }
 

@@ -8,6 +8,7 @@
     background-color: rgba(0, 0, 0, 0.829);
     position: absolute;
     @include flexCenter;
+    z-index: 10000;
 
     
     form

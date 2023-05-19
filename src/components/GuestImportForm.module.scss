@@ -1,0 +1,91 @@
+@import "../index.scss";
+
+.guestImportForm
+{
+    width:100%;
+    min-height: 100%;
+    background-color: rgba(0, 0, 0, 0.234);
+    position: absolute;
+    @include flexCenter;
+
+    input
+    {
+        height: 25px
+    }
+
+    .importWindow
+    {
+        position: relative;
+        width:50%;
+        height: 70%;
+        background-color: white;
+        border-radius: 5px;
+        @include flexCenter;
+        flex-direction: column;
+        font-family: 'Nova Oval', cursive;
+
+        .inputBox
+        {
+            @include flexCenter;
+            border: 1px solid $base-color;
+            padding: 10px;
+            border-radius: 5px;
+            width:80%;
+            margin-bottom: 5px;
+        }
+
+        .inputField
+            {
+                display: flex;
+                flex-direction: column;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: beige;
+                align-items: flex-start;
+                width:90%;
+            }
+
+
+            .closeWindow
+            {
+                position: absolute;
+                font-size: 30px;
+                right:10px;
+                top:10px;
+    
+                .closeButton
+                {
+                    fill: $base-color;
+                    padding: 0;
+    
+                    &:hover
+                    {
+                        fill: black;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+
+            button
+            {
+                 width:80%;
+                 background-color: $base-color;
+                 height: 50px;
+                 border: none;
+                 border-radius: 5px;
+                 margin-top:20px;
+                 margin-bottom:20px;
+                 color: white;
+                 font-size: 20px;
+                 box-shadow: 2px 2px 7px black;
+         
+                 &:hover
+                 {
+                     cursor: pointer;
+                     transform: scale(1.02);
+                 }
+            }
+    }
+}
+

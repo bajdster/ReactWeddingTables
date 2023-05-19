@@ -4,6 +4,7 @@ import Hall from './Hall';
 import GuestForm from './GuestForm';
 import classes from "./MainWindow.module.scss"
 import TableForm from './TableForm';
+import GuestImportForm from './GuestImportForm';
 import GuestContext from '../store/context-guest';
 import {DragDropContext} from "react-beautiful-dnd";
 import {v4 as uuidv4} from 'uuid';
@@ -15,6 +16,7 @@ const MainWindow:React.FC = () => {
 
     const [addGuestForm, setAddGuestForm] = useState<boolean>(false)
     const [addTableForm, setAddTableForm] = useState<boolean>(false)
+    const [guestImport, setGuestImport] = useState<boolean>(false)
 
     const openFormHandler = () =>
     {
@@ -23,6 +25,10 @@ const MainWindow:React.FC = () => {
     const openTableFormHandler = () =>
     {
         setAddTableForm(prev=> !prev)
+    }
+    const openGuestImport = () =>
+    {
+        setGuestImport(prev=> !prev)
     }
 
   const ctx = useContext(GuestContext)
@@ -219,6 +225,8 @@ const MainWindow:React.FC = () => {
             }
 
           }
+          //try 
+          ctx.updateGuests(guests)
           
     }
 
@@ -228,7 +236,6 @@ const MainWindow:React.FC = () => {
     }
 
    
-    
 
     ctx.changeTableDrag(true)
   }
@@ -238,12 +245,13 @@ console.log(ctx.tables)
     //continue with btf dnd library
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-    <div className={classes.mainWindow}>
-        <AsideMenu openFormHandler={openFormHandler} openTableFormHandler={openTableFormHandler}/>
-        <Hall/>
-        {addGuestForm && <GuestForm openFormHandler={openFormHandler}/>}
-        {addTableForm && <TableForm openTableFormHandler={openTableFormHandler}/>}
-    </div>
+      <div className={classes.mainWindow}>
+          <AsideMenu openFormHandler={openFormHandler} openTableFormHandler={openTableFormHandler} openGuestImport = {openGuestImport}/>
+          <Hall/>
+          {addGuestForm && <GuestForm openFormHandler={openFormHandler}/>}
+          {addTableForm && <TableForm openTableFormHandler={openTableFormHandler}/>}
+          {guestImport && <GuestImportForm openGuestImport={openGuestImport}/>}
+      </div>
     </DragDropContext>
     
   )

@@ -1,7 +1,7 @@
 
 
 type Table = {
-    name:  React.ReactNode;
+    name: string | number;
     seats: string[],
     id: string
 }

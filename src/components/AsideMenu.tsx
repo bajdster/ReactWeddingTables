@@ -9,9 +9,10 @@ import classes from "./AsideMenu.module.scss";
 interface Props {
   openFormHandler: () => void;
   openTableFormHandler: ()=> void;
+  openGuestImport: ()=> void;
 }
 
-const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler}) => {
+const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler, openGuestImport}) => {
   const ctx = useContext(GuestContext);
   const [isMenuClosed, setIsMenuClosed] = useState<boolean>(false)
 
@@ -28,11 +29,13 @@ const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler}) =>
     })
   }
 
+
+  //its time to add implementation of CSV parsing from file
   return (
     
-        <aside className={`${classes.asideMenu} ${isMenuClosed? classes.menuClosed : ""}`}>
+        <aside className={`${classes.asideMenu} ${isMenuClosed? classes.menuClosed : ""}`} style = {{transition:'all .5s ease'}}>
           
-            <div className={classes.showMenu} onClick={menuCloseHandler}>
+            <div className={classes.showMenu} onClick={menuCloseHandler} style={isMenuClosed ? {transform: `rotate(180deg)`, transition:'all .5s ease'}: {}}>
               <MdOutlineMenuOpen/>
             </div>
             
@@ -53,7 +56,15 @@ const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler}) =>
               <div className={classes.guestList}>
                 <div className={classes.guestAdd}>
                   <h3>Guest list</h3>
-                  <button onClick={openFormHandler}>Add Guest</button>
+                  <p>Guests: {ctx.guests.length}</p>
+                  <div className={classes.addGuestButtons}>
+                    <button onClick={openFormHandler}>Add Guest</button>
+
+                    <button onClick={openGuestImport}>
+                      Import Guests
+                    </button>
+                  </div>
+                  
                 </div>
                 
                 <ul className={`${classes.guestListBox} ${snapshot.isDraggingOver?classes.dragActive: ''}`} ref={provided.innerRef} {...provided.droppableProps}>

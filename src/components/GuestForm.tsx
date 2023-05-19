@@ -49,12 +49,12 @@ const childrenNamesHandler = (e:React.FormEvent<HTMLInputElement>) =>
 
 const submitGuestHandler = (e:React.FormEvent) =>
 {
-
     e.preventDefault();
     //use function from context to add guest
+    //add accompany and children only when are not empty
     ctx.addGuest({name: name, partner: accompanyName, group: group, children: childrenNames, id: uuidv4()})
-    ctx.addGuest({name: accompanyName, group: group, id: uuidv4()})
-    childrenNames.forEach((child)=>
+    accompanyName && ctx.addGuest({name: accompanyName, group: group, id: uuidv4()})
+    childrenNames && childrenNames.forEach((child)=>
     {
         ctx.addGuest({name:child.name, group: group, id: uuidv4()})
     })

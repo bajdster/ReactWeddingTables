@@ -20,8 +20,6 @@ import Table from "../models/Table"
 // }
 
 
-//still dont have a clue how to make that guestItem is movable and table stand still....
-
 type GuestContextObj = {
     guests: Guest[],
     tables: Table[],
@@ -54,6 +52,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
     useEffect(()=>
     {
         loadGuests();
+        loadTables();
     }, [])
 
     const loadGuests = async () =>
@@ -83,6 +82,35 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
         setGuests(addedGuests)
     }
 
+    const loadTables = async () =>
+    {
+        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/tables.json")
+
+        const data = await response.json();
+        const addedTables = [];
+
+        
+
+        for(const key in data)
+        {   
+            const table:Table = {
+                name: data[key].name,
+                id: data[key].id,
+                seats: data[key].seats
+            }
+
+            addedTables.push(table)
+            // setGuests((prev)=>
+            // {
+            //     return [...prev, guest]
+            // })
+        }
+        setTables(addedTables)
+    }
+
+
+
+
     const addGuest = async (guest: Guest) =>
     {
         const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/guests.json",
@@ -100,20 +128,40 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
     }
 
 
-    const addTable = (table: Table) =>
+    const addTable = async (table: Table) =>
     {
+
+        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/tables.json",
+        {
+            method: "POST",
+            body: JSON.stringify(table)
+        })
+
+
         setTables((prev)=>
         {
             return [...prev, table]
         })
     }
 
-    const updateTables = (tables:Table[]) =>
+    const updateTables = async (tables:Table[]) =>
     {
+        //here need to update whole DB
+        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/tables.json",
+        {
+            method: "PUT",
+            body: JSON.stringify(tables)
+        })
+
         setTables(tables)
     }
-    const updateGuests = (guests:Guest[]) =>
+    const updateGuests = async (guests:Guest[]) =>
     {
+        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/guests.json",
+        {
+            method: "PUT",
+            body: JSON.stringify(guests)
+        })
         setGuests(guests)
     }
 
