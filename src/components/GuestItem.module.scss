@@ -38,6 +38,21 @@
     {
         opacity: 0.5;
     }
+
+    .deleteGuestButton
+    {
+        @include flexCenter;
+        position: absolute;
+        top:-10px;
+        right: -10px;
+        color:red;
+
+        &:hover
+        {
+            cursor: pointer;
+            color:rgb(186, 3, 3);
+        }
+    }
 }
 
 

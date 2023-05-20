@@ -28,6 +28,7 @@ type GuestContextObj = {
     addTable: (table:Table) => void,
     updateTables: (tables:Table[]) => void,
     updateGuests: (guests: Guest[]) => void,
+    deleteGuest: (id:string) => void,
     changeTableDrag: (isDragPossibility:boolean) => void,
 
 }
@@ -40,6 +41,7 @@ const GuestContext = React.createContext<GuestContextObj>({
     addTable: () => {},
     updateTables: () => {},
     updateGuests: ()=> {},
+    deleteGuest: () => {},
     changeTableDrag: ()=> {},
 })
 
@@ -124,7 +126,6 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
             return [...prev, guest]
         })
 
-        
     }
 
 
@@ -165,6 +166,17 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
         setGuests(guests)
     }
 
+    const deleteGuest = (id:string) =>
+    {
+        console.log(id)
+        const updatedGuests = guests.filter(guest=>
+            {
+                return guest.name !== id;
+            })
+
+        updateGuests(updatedGuests);
+    }
+
     const changeTableDrag = (turn:boolean) =>
     {
         setCanTableDrag(turn)
@@ -184,6 +196,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
         addTable: addTable,
         updateTables: updateTables,
         updateGuests: updateGuests,
+        deleteGuest: deleteGuest,
         changeTableDrag: changeTableDrag,
     }
 

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { BsPersonCircle } from 'react-icons/bs';
+import { TiDelete } from 'react-icons/ti';
 import classes from './GuestItem.module.scss';
 import { Draggable } from 'react-beautiful-dnd';
 import GuestContext from '../store/context-guest';
@@ -11,6 +12,7 @@ const GuestItem: React.FC<{
   onGuestSeatHandler?: (e: MouseEvent) => void;
 }> = (props) => {
   const ctx = useContext(GuestContext);
+  const [isDeleteButtonOpen, setIsDeleteButtonOpen] = useState<boolean>(false);
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
 
   const dragStartHandler = (e: React.MouseEvent) => {
@@ -24,6 +26,16 @@ const GuestItem: React.FC<{
     }
   };
 
+  const showDeleteButton = () =>
+  {
+    setIsDeleteButtonOpen((prev)=> !prev);
+  }
+
+  const removeGuest = () =>
+  {
+    ctx.deleteGuest(props.id)
+  }
+
   return (
     <Draggable draggableId={props.id} index={props.index} key={props.id}>
       {(provided: any) => (
@@ -33,6 +45,7 @@ const GuestItem: React.FC<{
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           onMouseDown={dragStartHandler}
+          
           style={{
             ...provided.draggableProps.style,
             // position: 'fixed',
@@ -41,7 +54,12 @@ const GuestItem: React.FC<{
           }}
         >
           <BsPersonCircle />
-          <div className={classes.description}>{props.guestContent}</div>
+          <div className={classes.description} onDoubleClick={showDeleteButton}>
+            {props.guestContent}
+          </div>
+          {isDeleteButtonOpen && <div className={classes.deleteGuestButton} onClick={removeGuest}>
+            <TiDelete/>
+          </div>}
         </li>
       )}
     </Draggable>
