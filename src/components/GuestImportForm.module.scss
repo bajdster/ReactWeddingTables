@@ -5,6 +5,7 @@
     width:100%;
     min-height: 100%;
     background-color: rgba(0, 0, 0, 0.234);
+    z-index: 1000;
     position: absolute;
     @include flexCenter;
 
@@ -13,59 +14,58 @@
         height: 25px
     }
 
+    .closeWindow
+    {
+        position: absolute;
+        font-size: 70px;
+        right:20px;
+        top:20px;
+
+        &:hover
+        {
+            cursor: pointer;
+            color: rgb(169, 23, 23);
+            transform: scale(1.1);
+        }
+
+    }
+
+
     .importWindow
     {
         position: relative;
         width:50%;
-        height: 70%;
+        height: 200px;
         background-color: white;
         border-radius: 5px;
         @include flexCenter;
+        box-shadow: 2px 2px 7px black;
         flex-direction: column;
         font-family: 'Nova Oval', cursive;
 
-        .inputBox
-        {
-            @include flexCenter;
-            border: 1px solid $base-color;
-            padding: 10px;
-            border-radius: 5px;
-            width:80%;
-            margin-bottom: 5px;
-        }
+        // .inputBox
+        // {
+        //     @include flexCenter;
+        //     border: 1px solid $base-color;
+        //     padding: 10px;
+        //     border-radius: 5px;
+        //     width:80%;
+        //     margin-bottom: 5px;
+        // }
 
-        .inputField
-            {
-                display: flex;
-                flex-direction: column;
-                padding: 10px;
-                border-radius: 5px;
-                background-color: beige;
-                align-items: flex-start;
-                width:90%;
-            }
+        // .inputField
+        //     {
+        //         display: flex;
+        //         flex-direction: column;
+        //         padding: 10px;
+        //         border-radius: 5px;
+        //         background-color: beige;
+        //         align-items: flex-start;
+        //         width:90%;
+        //     }
 
 
-            .closeWindow
-            {
-                position: absolute;
-                font-size: 30px;
-                right:10px;
-                top:10px;
-    
-                .closeButton
-                {
-                    fill: $base-color;
-                    padding: 0;
-    
-                    &:hover
-                    {
-                        fill: black;
-                        cursor: pointer;
-                    }
-                }
-            }
-
+ 
 
             button
             {
