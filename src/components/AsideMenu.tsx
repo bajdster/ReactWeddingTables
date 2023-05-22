@@ -42,7 +42,7 @@ const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler, ope
                 
                 <div className={classes.tables}>
                 <h3>Add table</h3>
-                <button>
+                <button onClick = {()=>{window.alert("Option temporarily unavailable")}}>
                   <MdTableBar />
                 </button>
                 <button onClick={addSquareTable}>

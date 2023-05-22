@@ -42,6 +42,9 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
     if (table && table.style.top && parseInt(table.style.top) < 100) {
       table.style.top = "10px";
     }
+    if (table && table.style.left && parseInt(table.style.left) < 0) {
+      table.style.left = "10px";
+    }
   };
 
   useEffect(()=>
@@ -71,11 +74,9 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
       }
       const onMouseMove = (e: MouseEvent) => {
         e.preventDefault();
-        if (isClicked.current) {
+        if (isClicked.current) 
+        {
           if (!props.hall.current || !tableRef.current) return;
-      
-          const hall = props.hall.current;
-          const table = tableRef.current;
       
           if (!hall.contains(e.target as Node) || !table.contains(e.target as Node)) return;
       
