@@ -6,6 +6,7 @@ import Guest from '../models/Guest';
 import GuestContext from '../store/context-guest';
 import classes from "./GuestImportForm.module.scss";
 import { TiDelete } from 'react-icons/ti';
+import example from "../images/example.png"
 
 const GuestImportForm: React.FC<{ openGuestImport: () => void }> = (props) => 
 {
@@ -57,6 +58,9 @@ const GuestImportForm: React.FC<{ openGuestImport: () => void }> = (props) =>
         <input {...getInputProps()} />
         <p>Drag the CSV file or click to select a file.</p>
         <p>(Make sure, that guest names are in column number 2)</p>
+        <div className={classes.example}>
+          <img src={example}></img>
+        </div>
       </div>
       
     </div>

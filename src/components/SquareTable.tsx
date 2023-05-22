@@ -36,9 +36,12 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
 
 
 
-
   const rotateTableHandler = () => {
     setRotation((prevRotation) => prevRotation + 90);
+    const table = tableRef.current;
+    if (table && table.style.top && parseInt(table.style.top) < 100) {
+      table.style.top = "10px";
+    }
   };
 
   useEffect(()=>
@@ -78,9 +81,12 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
       
           const nextX = e.clientX - coords.current.startX + coords.current.lastX;
           const nextY = e.clientY - coords.current.startY + coords.current.lastY;
+
+          
       
           table.style.top = `${nextY}px`;
           table.style.left = `${nextX}px`;
+
         }
       };
 
