@@ -8,7 +8,7 @@ type Guest = {
     name: string,
     age?: string;
     partner?: string;
-    group?: string;
+    group: string;
     children?: Children[]
 }
 

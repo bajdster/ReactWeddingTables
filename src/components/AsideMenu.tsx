@@ -70,7 +70,7 @@ const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler, ope
                 <ul className={`${classes.guestListBox} ${snapshot.isDraggingOver?classes.dragActive: ''}`} ref={provided.innerRef} {...provided.droppableProps}>
                   {ctx.guests.map((guest, index) => (
                     <React.Fragment key={`${guest.name}${index}`}>
-                      {guest.name && <GuestItem guestContent = {guest.name} id={guest.name} index={index} />}
+                      {guest.name && <GuestItem guestContent = {guest.name} id={guest.name} index={index} group={guest.group} />}
 
                     </React.Fragment>
                   ))}

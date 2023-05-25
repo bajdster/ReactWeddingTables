@@ -1,8 +1,8 @@
-
+import Guest from "./Guest";
 
 type Table = {
     name: string | number;
-    seats: string[],
+    seats: Guest[],
     id: string
 }
 

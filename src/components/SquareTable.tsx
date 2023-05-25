@@ -136,12 +136,12 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
   
           const tableGuests = searchedTable[0].seats.filter(seat=>
             {
-              return seat!==''
+              return seat.name!==''
             })
   
           const guestToLobby = tableGuests.map(guest=>
             {
-              return {name:guest, id: uuidv4()}
+              return {name:guest.name, id: uuidv4(), group: guest.group}
             })
   
             guests = [...guests, ...guestToLobby] 
@@ -213,27 +213,25 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
           
             <div className={classes.table}>
               <span style={{transform: `rotate(${-rotation}deg)`}}>
-              {props.table.name}
+              {/* {props.table && props.table.name ? props.table.name : ''} */}
               </span>
-              {/* {isTableNameFormOpen && 
-                (<ChangeTableNameForm
-                  changeTableName={changeTableName}
-                  changeNewTableName={changeNewTableName}
-                  newTableName={newTableName}
-                />)
-              } */}
-              {/* {
-                <ChangeTableNameForm
-                changeTableName={changeTableName}
-                changeNewTableName={changeNewTableName}
-                newTableName={newTableName}
-                isTableNameFormOpen = {isTableNameFormOpen}
-              />
-              } */}
-              {seats.map((seat, index)=>
-                {
-                  return <Seat id={index} key = {index} name={seat} tableId ={props.id} onGuestSeatHandle={onSeatMouseUp} style={{transform: `rotate(${-rotation}deg)`}}/>
-                })}
+            
+              {seats.map((seat, index) => {
+              if (!seat) {
+                return; // lub obsłuż ten przypadek w inny sposób
+              }
+              return (
+                <Seat
+                  id={index}
+                  key={index}
+                  name={seat.name}
+                  tableId={props.id}
+                  onGuestSeatHandle={onSeatMouseUp}
+                  group={seat.group}
+                  style={{ transform: `rotate(${-rotation}deg)` }}
+                />
+              );
+            })}
             </div>
 
 

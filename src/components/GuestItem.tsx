@@ -10,6 +10,7 @@ const GuestItem: React.FC<{
   id: string;
   index: number;
   onGuestSeatHandler?: (e: MouseEvent) => void;
+  group?: string;
 }> = (props) => {
   const ctx = useContext(GuestContext);
   const [isDeleteButtonOpen, setIsDeleteButtonOpen] = useState<boolean>(false);
@@ -24,6 +25,8 @@ const GuestItem: React.FC<{
     if (props.onGuestSeatHandler) {
       props.onGuestSeatHandler(e.nativeEvent);
     }
+
+    if(props.group) ctx.getGroup(props.group)
   };
 
   const showDeleteButton = () =>
@@ -44,6 +47,7 @@ const GuestItem: React.FC<{
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
+          // group={props.group}
           onMouseDown={dragStartHandler}
           
           style={{
@@ -51,6 +55,7 @@ const GuestItem: React.FC<{
             // position: 'fixed',
             top: provided.draggableProps.style.y - mouseOffset.y,
             left: provided.draggableProps.style.x - mouseOffset.x,
+           backgroundColor: props.group === "Bride" ? "rgb(187, 56, 56)" : "rgb(70, 70, 173)"
           }}
         >
           <BsPersonCircle />
