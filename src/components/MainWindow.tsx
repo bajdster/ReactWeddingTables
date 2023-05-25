@@ -136,7 +136,7 @@ const MainWindow:React.FC = () => {
             if(destinationTableId === "asideMenu")
             {
 
-              console.log("JEBANY wczesniejszy index: " + previousAreaIndex)
+              console.log("wczesniejszy index: " + previousAreaIndex)
               const updatedTable = tables.map(table=>
                 {
                   if(table.id === sourcetableId)
