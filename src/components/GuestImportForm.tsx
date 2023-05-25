@@ -20,14 +20,25 @@ const GuestImportForm: React.FC<{ openGuestImport: () => void }> = (props) =>
     reader.onload = () => {
       const csvText = reader.result as string;
       const parsedData = parseCSV(csvText, 1); // Przetwarzanie kolumny nr 2
+      const parsedGroup = parseCSV(csvText, 4); // Przetwarzanie kolumny nr 5
 
-      const convertedGuests:Guest[] = parsedData.map(guest=>
+
+      const convertedGuests:Guest[] = parsedData.map((guest, index)=>
         {
-          return {name: guest, id: uuidv4()};
+
+            return {name: guest, id: uuidv4(), group: parsedGroup[index]};
+
+      
+        })
+
+      //delete undefined variable from CSV
+      const convertedGuestsAll: Guest[] = convertedGuests.filter(guest=>
+        {
+          return guest.name !== undefined
         })
 
 
-      setCSVData(convertedGuests);
+      setCSVData(convertedGuestsAll);
     };
 
     reader.readAsText(file);

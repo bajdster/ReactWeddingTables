@@ -3,6 +3,18 @@
 
 .asideMenu
 {
+    ::-webkit-scrollbar {
+        width: 10px;
+        background-color: #fdfcfc;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background-color: $base-color;
+        box-shadow: 1px 1px 2px black;
+        border-radius: 10px;
+      }
+
+
     width:350px;
     height:100%;
     box-shadow: 1px 1px 1px black;
@@ -148,3 +160,4 @@
 {
     background-color: rgb(193, 192, 192);
 }
+

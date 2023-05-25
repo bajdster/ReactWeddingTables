@@ -30,6 +30,8 @@ type GuestContextObj = {
     updateGuests: (guests: Guest[]) => void,
     deleteGuest: (id:string) => void,
     changeTableDrag: (isDragPossibility:boolean) => void,
+    getGroup: (group:string)=> void,
+    group: string
 
 }
 
@@ -43,6 +45,8 @@ const GuestContext = React.createContext<GuestContextObj>({
     updateGuests: ()=> {},
     deleteGuest: () => {},
     changeTableDrag: ()=> {},
+    getGroup: () => {},
+    group: ""
 })
 
 export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props) =>
@@ -50,6 +54,15 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
     const [guests, setGuests] = useState<Guest[]>([]);
     const [tables, setTables] = useState<Table[]>([]);
     const [canTableDrag, setCanTableDrag] = useState<boolean>(true);
+    const [group, setGroup] = useState<string>("")
+
+    //prod
+    // const guestURL:string = "https://wedding-tables-22036-default-rtdb.firebaseio.com/guests.json"
+    // const tablesURL: string = "https://wedding-tables-22036-default-rtdb.firebaseio.com/tables.json"
+
+    //tst
+    const guestURL:string = "https://wedding-tables-tst-default-rtdb.firebaseio.com/guests.json"
+    const tablesURL:string = "https://wedding-tables-tst-default-rtdb.firebaseio.com/tables.json"
 
     useEffect(()=>
     {
@@ -59,7 +72,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
 
     const loadGuests = async () =>
     {
-        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/guests.json")
+        const response = await fetch(guestURL)
 
         const data = await response.json();
         const addedGuests = [];
@@ -71,6 +84,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
             const guest:Guest = {
                 name: data[key].name,
                 id: data[key].id,
+                group: data[key].group
                 // partner: data[key].partner,
                 // children: data[key].children
             }
@@ -86,7 +100,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
 
     const loadTables = async () =>
     {
-        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/tables.json")
+        const response = await fetch(tablesURL)
 
         const data = await response.json();
         const addedTables = [];
@@ -115,7 +129,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
 
     const addGuest = async (guest: Guest) =>
     {
-        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/guests.json",
+        const response = await fetch(guestURL,
         {
             method: "POST",
             body: JSON.stringify(guest)
@@ -132,7 +146,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
     const addTable = async (table: Table) =>
     {
 
-        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/tables.json",
+        const response = await fetch(tablesURL,
         {
             method: "POST",
             body: JSON.stringify(table)
@@ -148,7 +162,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
     const updateTables = async (tables:Table[]) =>
     {
         //here need to update whole DB
-        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/tables.json",
+        const response = await fetch(tablesURL,
         {
             method: "PUT",
             body: JSON.stringify(tables)
@@ -158,7 +172,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
     }
     const updateGuests = async (guests:Guest[]) =>
     {
-        const response = await fetch("https://wedding-tables-22036-default-rtdb.firebaseio.com/guests.json",
+        const response = await fetch(guestURL,
         {
             method: "PUT",
             body: JSON.stringify(guests)
@@ -182,6 +196,10 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
         setCanTableDrag(turn)
     }
 
+    const getGroup = (group:string) =>
+    {
+        setGroup(group)
+    }
 
     useEffect(()=>
     {
@@ -192,12 +210,14 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
         guests: guests,
         tables: tables,
         canTableDrag: canTableDrag,
+        group:group,
         addGuest: addGuest,
         addTable: addTable,
         updateTables: updateTables,
         updateGuests: updateGuests,
         deleteGuest: deleteGuest,
         changeTableDrag: changeTableDrag,
+        getGroup:getGroup
     }
 
     return (
