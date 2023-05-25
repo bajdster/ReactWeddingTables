@@ -153,6 +153,7 @@ useEffect(()=>
                     <select onChange={(e:React.ChangeEvent<HTMLSelectElement>)=> setGroup(e.target.value)}>
                         <option value="bride">Bride guests</option>
                         <option value="groom">Groom guests</option>
+                        <option value="Newlyweds">Newlyweds</option>
                     </select>
                 </div>
             </div>

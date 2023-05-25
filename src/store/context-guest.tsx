@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react"
 import Guest from "../models/Guest"
 import Table from "../models/Table"
-
+import {v4 as uuidv4} from 'uuid'
 
 // type Guest = {
 //     id?: string,
@@ -186,8 +186,26 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
             {
                 return guest.name !== id;
             })
+        
+        const ctxTables = tables
+        const updatedTables = ctxTables.map(table=>
+            {
+                const newSeats = table.seats.map(seat=>
+                    {
+                        if(seat.name === id)
+                        {
+                            return {group: "", name: "", id:uuidv4()}
+                        }
+                        else return seat
+                    })
+
+                    return {...table, seats: newSeats}
+            })
+            console.log(updatedTables)
 
         updateGuests(updatedGuests);
+        updateTables(updatedTables)
+        
     }
 
     const changeTableDrag = (turn:boolean) =>
@@ -236,3 +254,8 @@ export default GuestContext;
 //create importing system for guests saved in pdf
 
 //change the way to adding guests not as 3 groups of people connected to one
+
+//take care of non even amount of guests (temporiarly set even values) + 
+//take care about deleting from table +
+//position of tables?
+//disable seats when dbclick + 

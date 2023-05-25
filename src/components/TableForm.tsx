@@ -49,7 +49,7 @@ const TableForm:React.FC<{openTableFormHandler:()=> void}> = (props) => {
             <div className={classes.inputBox}>
                 <div className={classes.inputField}>
                     <label htmlFor="guestAmount">Guest Amount</label>
-                    <input type="number" id="guestAmount" min="1" max="100" ref={tableGuestAmount}></input>
+                    <input type="number" id="guestAmount" min="2" max="100" step="2" ref={tableGuestAmount}></input>
                 </div>
             </div>
 
