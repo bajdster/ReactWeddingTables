@@ -12,6 +12,7 @@ const Seat:React.FC<{id:number, name: string, group:string, tableId:string, onGu
           (provided:any, snapshot:any)=>(
             <div className={`${classes.seat} ${snapshot.isDraggingOver?classes.dragActive: ''}`} ref={provided.innerRef}{...provided.droppableProps}
             style={props.style}>
+              
             {props.name && <GuestItem guestContent={props.name} id={props.name} index={props.id} onGuestSeatHandler = {props.onGuestSeatHandle} group={props.group}/>}
               
             {provided.placeholder} 

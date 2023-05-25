@@ -7,7 +7,6 @@ const Hall = () => {
   const ctx = useContext(GuestContext);
   const hallRef = useRef<HTMLDivElement>(null);
 
-  console.log(ctx.tables);
 
   return (
     <div className={classes.container}>

@@ -90,7 +90,7 @@ const MainWindow:React.FC = () => {
           if(source.droppableId === "asideMenu")
           {
             //wszelki ruch w obrębie asideMenu
-            if(destinationTableId === "asideMenu") return;
+            if(source.droppableId === "asideMenu" && destinationTableId === "asideMenu") return;
             
             //  add = guests[source.index]
             guests.splice(source.index, 1)
@@ -125,6 +125,7 @@ const MainWindow:React.FC = () => {
 
                 
               })
+            
               ctx.updateTables(updatedTables)
             
           }
@@ -136,37 +137,32 @@ const MainWindow:React.FC = () => {
             if(destinationTableId === "asideMenu")
             {
 
-              console.log("wczesniejszy index: " + previousAreaIndex)
-              const updatedTable = tables.map(table=>
+              const updatedTables = tables.map(table=>
                 {
                   if(table.id === sourcetableId)
                   {
-                    //jakby zle ustawiało name ....
-
-
+                    //conditions share the same action trigger and create bugs (multiple calls)
                     guests.splice(guests.length, 0, {name: draggableId, id:uuidv4(), group: groupData})
 
                     const newSeats = [...table.seats];
-                    if (newSeats[previousAreaIndex]) {
-                      newSeats[previousAreaIndex].name = '';
-                      newSeats[previousAreaIndex].group = '';
-                      newSeats[previousAreaIndex].id = uuidv4();
-                    } else {
-                      newSeats[previousAreaIndex] = { name: '', group: '', id: uuidv4().toString() };
-                    }
 
- 
-                   table = { ...table, seats: newSeats };
+
+                      newSeats[previousAreaIndex].name = "";
+                      newSeats[previousAreaIndex].group = "";
+                      newSeats[previousAreaIndex].id = uuidv4();
+                      table = {...table, seats: newSeats};
                     
                     return table;
                   }
                 
-                  else return table
-                 
+                  else 
+                  {
+                    return table
+                  }
                   
                 })
-
-                ctx.updateTables(updatedTable)
+                
+                ctx.updateTables(updatedTables)
             }
 
 
@@ -220,12 +216,11 @@ const MainWindow:React.FC = () => {
                   }
                   
                 })
-
                 ctx.updateTables(updatedTables)
             }
 
             //sourcem jest jeden ze stołów ale destination jest inny stół
-            else if(sourcetableId !== destinationTableId)
+            else if(sourcetableId !== destinationTableId && destinationTableId!== "asideMenu")
             {
               const sourceTableValue:string = draggableId;
               const sourceTableValueIndex:number = previousAreaIndex;

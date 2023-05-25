@@ -116,10 +116,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
             }
 
             addedTables.push(table)
-            // setGuests((prev)=>
-            // {
-            //     return [...prev, guest]
-            // })
+        
         }
         setTables(addedTables)
     }
@@ -162,6 +159,8 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
     const updateTables = async (tables:Table[]) =>
     {
         //here need to update whole DB
+
+        console.log(tables)
         const response = await fetch(tablesURL,
         {
             method: "PUT",
@@ -201,10 +200,10 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
         setGroup(group)
     }
 
-    useEffect(()=>
-    {
-        console.log(guests)
-    }, [])
+    // useEffect(()=>
+    // {
+    //     console.log(guests)
+    // }, [])
 
     const contextValue: GuestContextObj = {
         guests: guests,

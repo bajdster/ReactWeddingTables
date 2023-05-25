@@ -220,6 +220,7 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
               if (!seat) {
                 return; // lub obsłuż ten przypadek w inny sposób
               }
+              
               return (
                 <Seat
                   id={index}
