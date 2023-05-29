@@ -18,11 +18,10 @@ type Children = {
 const [name, setName]= useState<string>("Guest")
 const [accompanyName, setAccompanyName] = useState<string>("")
 const [childrenNames, setChildrenNames] = useState<Children[]>([])
-const [age, setAge] = useState<string>("")
 const [childrenAmount, setChildrenAmount] = useState<number>(0)
 const [childrenAmountInputs, setChildrenAmountInputs] = useState<number[]>([])
 const [childrens, setChildrens] = useState<Children[]>([])
-const [group, setGroup] = useState<string>("Bride family")
+const [group, setGroup] = useState<string>("Bride")
 
 
 
@@ -64,8 +63,8 @@ const submitGuestHandler = (e:React.FormEvent) =>
 
     if(unique && name !== "Guest")
     {
-        ctx.addGuest({name: name, id: uuidv4()})
-        accompanyName && ctx.addGuest({name: accompanyName, id: uuidv4()})
+        ctx.addGuest({name: name, id: uuidv4(), group: group})
+        accompanyName && ctx.addGuest({name: accompanyName, id: uuidv4(), group: group})
         childrenNames && childrenNames.forEach((child)=>
         {
             ctx.addGuest({name:child.name, group: group, id: uuidv4()})
@@ -152,10 +151,9 @@ useEffect(()=>
                 <div className={classes.inputField}>
                     <label htmlFor="group">Group</label>
                     <select onChange={(e:React.ChangeEvent<HTMLSelectElement>)=> setGroup(e.target.value)}>
-                        <option value="Bride family">Bride family</option>
-                        <option value="Bride friends">Bride friends</option>
-                        <option value="Groom family">Groom family</option>
-                        <option value="Groom friends">Groom friends</option>
+                        <option value="bride">Bride guests</option>
+                        <option value="groom">Groom guests</option>
+                        <option value="Newlyweds">Newlyweds</option>
                     </select>
                 </div>
             </div>

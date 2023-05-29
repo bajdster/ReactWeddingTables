@@ -9,6 +9,7 @@ import GuestContext from '../store/context-guest';
 import {DragDropContext} from "react-beautiful-dnd";
 import {v4 as uuidv4} from 'uuid';
 import Table from '../models/Table';
+import Guest from '../models/Guest';
 
 
 
@@ -17,6 +18,9 @@ const MainWindow:React.FC = () => {
     const [addGuestForm, setAddGuestForm] = useState<boolean>(false)
     const [addTableForm, setAddTableForm] = useState<boolean>(false)
     const [guestImport, setGuestImport] = useState<boolean>(false)
+
+    // const [groupData, setGroupData] = useState<string>("")
+  
 
     const openFormHandler = () =>
     {
@@ -32,9 +36,18 @@ const MainWindow:React.FC = () => {
     }
 
   const ctx = useContext(GuestContext)
+ 
 
-  const onDragStart = (result:any) =>
+  //nie odczytuje dataset.group.........
+  const onDragStart = (result:any, event:any) =>
   {
+    
+    // if(group) 
+    // {
+    //   console.log(group)
+    //   setGroupData(group)
+    // }
+    
     ctx.changeTableDrag(false)
   }
   
@@ -43,6 +56,7 @@ const MainWindow:React.FC = () => {
     
     console.log(result)
     const {source, destination, draggableId} = result;
+    const groupData = ctx.group;
     
     //now its working
     if(destination)
@@ -60,7 +74,8 @@ const MainWindow:React.FC = () => {
           const nextAreaIndex:number = destinationContent[1];
           //now it is neccesary to iterate over tables and find that one by tableId and then from source gets properties and put this into seat which index is equal to index
           console.log(tableId)
-          console.log(seatIndex)
+
+          console.log(previousAreaIndex)
         
           if(!destination) return;
           if(!destination.droppableId === source.droppableId && destination.index === source.index) return;
@@ -75,7 +90,7 @@ const MainWindow:React.FC = () => {
           if(source.droppableId === "asideMenu")
           {
             //wszelki ruch w obrębie asideMenu
-            if(destinationTableId === "asideMenu") return;
+            if(source.droppableId === "asideMenu" && destinationTableId === "asideMenu") return;
             
             //  add = guests[source.index]
             guests.splice(source.index, 1)
@@ -85,18 +100,18 @@ const MainWindow:React.FC = () => {
                 if(table.id === tableId)
                 {
                   const newSeats = [...table.seats]
-                  if(newSeats[nextAreaIndex] === "")
+                  if(newSeats[nextAreaIndex].name === "")
                   {
-                    newSeats[nextAreaIndex] = draggableId;
+                    newSeats[nextAreaIndex] = {name: draggableId, id:uuidv4(), group: groupData};
                     table = {...table, seats:newSeats}
                   }
                   //podmiana gościa z lobby z gościem który zajął miejsce
                   else 
                   {
                     const previousSeatValue = newSeats[nextAreaIndex];
-                    newSeats[nextAreaIndex] = draggableId;
+                    newSeats[nextAreaIndex] = {name: draggableId, id:uuidv4(), group: groupData};
                     table = {...table, seats:newSeats}
-                    guests.splice(guests.length, 0, {name: previousSeatValue, id:uuidv4()})
+                    guests.splice(guests.length, 0, previousSeatValue)
                   }
                   
                   // console.log(table.seats)
@@ -110,6 +125,7 @@ const MainWindow:React.FC = () => {
 
                 
               })
+            
               ctx.updateTables(updatedTables)
             
           }
@@ -120,23 +136,33 @@ const MainWindow:React.FC = () => {
             //przypadek gdy ze stołu chcemy zdjąć gościa z powrotem do lobby
             if(destinationTableId === "asideMenu")
             {
-              const updatedTable = tables.map(table=>
+
+              const updatedTables = tables.map(table=>
                 {
                   if(table.id === sourcetableId)
                   {
-                    const newSeats = [...table.seats]
-                    newSeats[previousAreaIndex] = '';
-                    table = {...table, seats: newSeats}
-                    guests.splice(guests.length, 0, {name: draggableId, id:uuidv4()})
-                    return table
+                    //conditions share the same action trigger and create bugs (multiple calls)
+                    guests.splice(guests.length, 0, {name: draggableId, id:uuidv4(), group: groupData})
+
+                    const newSeats = [...table.seats];
+
+
+                      newSeats[previousAreaIndex].name = "";
+                      newSeats[previousAreaIndex].group = "";
+                      newSeats[previousAreaIndex].id = uuidv4();
+                      table = {...table, seats: newSeats};
+                    
+                    return table;
                   }
                 
-                  else return table
-                 
+                  else 
+                  {
+                    return table
+                  }
                   
                 })
-
-                ctx.updateTables(updatedTable)
+                
+                ctx.updateTables(updatedTables)
             }
 
 
@@ -152,23 +178,25 @@ const MainWindow:React.FC = () => {
                     const newSeats = [...table.seats]
 
                     //przypadek gdy krzesło jest puste
-                    if(newSeats[nextAreaIndex]==='')
+                    if(newSeats[nextAreaIndex].name==='')
                     {
-                      newSeats[nextAreaIndex] = draggableId;
-                      newSeats[previousAreaIndex] ='';
+                      newSeats[nextAreaIndex] = {name: draggableId, id:uuidv4(), group: groupData};
+                      newSeats[previousAreaIndex].name ='';
+                      newSeats[previousAreaIndex].group ='';
                       table = {...table, seats:newSeats}
                     }
 
                     //przypadek gdy krzesło nie jest puste
 
-                    else if (newSeats[nextAreaIndex]!=='' && newSeats[nextAreaIndex]!==draggableId)
+                    else if (newSeats[nextAreaIndex].name !=='' && newSeats[nextAreaIndex].name!==draggableId)
                     {
                       
-                      const previousSeatContent = newSeats[nextAreaIndex].toString()
+                      // const previousSeatContent = newSeats[nextAreaIndex].toString()
+                      const previousSeatContent = newSeats[nextAreaIndex]
                       // console.log(typeof previousSeatContent)
                       // newSeats[nextAreaIndex] = "";
                       // newSeats[previousAreaIndex] ="";
-                      newSeats[nextAreaIndex] = draggableId;
+                      newSeats[nextAreaIndex] ={name: draggableId, id:uuidv4(), group: groupData};
 
                       newSeats[previousAreaIndex] = previousSeatContent;
                       
@@ -188,16 +216,15 @@ const MainWindow:React.FC = () => {
                   }
                   
                 })
-
                 ctx.updateTables(updatedTables)
             }
 
             //sourcem jest jeden ze stołów ale destination jest inny stół
-            else if(sourcetableId !== destinationTableId)
+            else if(sourcetableId !== destinationTableId && destinationTableId!== "asideMenu")
             {
               const sourceTableValue:string = draggableId;
               const sourceTableValueIndex:number = previousAreaIndex;
-              let destinationTableValue: string;
+              let destinationTableValue: Guest;
               const destinationTableValueIndex = nextAreaIndex;
 
               const tempTables = [...tables];
@@ -206,7 +233,7 @@ const MainWindow:React.FC = () => {
                   if(table.id === destinationTableId)
                   {
                     destinationTableValue = table.seats[destinationTableValueIndex]
-                    table.seats[destinationTableValueIndex] = sourceTableValue;
+                    table.seats[destinationTableValueIndex] = {name: sourceTableValue, id:uuidv4(), group: groupData};
                   }
 
                   else return table
@@ -240,7 +267,6 @@ const MainWindow:React.FC = () => {
     ctx.changeTableDrag(true)
   }
  
-console.log(ctx.tables)
 
     //continue with btf dnd library
   return (

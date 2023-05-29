@@ -3,7 +3,19 @@
 
 .asideMenu
 {
-    width:350px;
+    ::-webkit-scrollbar {
+        width: 10px;
+        background-color: #fdfcfc;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background-color: $base-color;
+        box-shadow: 1px 1px 2px black;
+        border-radius: 10px;
+      }
+
+
+    width:370px;
     height:100%;
     box-shadow: 1px 1px 1px black;
     font-family: 'Bebas Neue', cursive;
@@ -148,3 +160,4 @@
 {
     background-color: rgb(193, 192, 192);
 }
+

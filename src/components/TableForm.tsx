@@ -2,7 +2,8 @@ import React, {useRef, useState, useContext, useEffect} from 'react'
 import classes from "./TableForm.module.scss"
 import {AiOutlineCloseSquare} from "react-icons/ai"
 import GuestContext from '../store/context-guest'
-import {v4 as uuidv4} from 'uuid'
+import {v4 as uuidv4} from 'uuid';
+import Guest from '../models/Guest';
 
 const TableForm:React.FC<{openTableFormHandler:()=> void}> = (props) => {
 
@@ -10,14 +11,14 @@ const TableForm:React.FC<{openTableFormHandler:()=> void}> = (props) => {
     const tableGuestAmount = useRef<HTMLInputElement>(null)
     const ctx = useContext(GuestContext)
 
-    const [seats, setSeats] =  useState<string[]>([]);
+    const [seats, setSeats] =  useState<Guest[]>([]);
 
     const handleButtonClick = (e:React.FormEvent) => {
         e.preventDefault();
         const seatsValue = Number(tableGuestAmount.current?.value);
         // const table = String(tableName.current?.value);
 
-        const newSeats:string[] = Array.from({ length: seatsValue }, (_, i) => "");
+        const newSeats:Guest[] = Array.from({ length: seatsValue }, (_, i) => ({name:"", id:uuidv4(), group: ""}));
         setSeats(newSeats);
 
         // ctx.addTable({name: table, seats: seats})
@@ -30,7 +31,7 @@ const TableForm:React.FC<{openTableFormHandler:()=> void}> = (props) => {
             return;
         }
         const table = String(tableName.current?.value);
-        ctx.addTable({name: table, seats: seats, id: uuidv4()})
+        ctx.addTable({name: table, seats: seats, id: uuidv4(), x: 0, y: 0, startX: 0, startY: 0, lastX:0, lastY:0, rotation: 0})
 
       },[seats])
 
@@ -48,7 +49,7 @@ const TableForm:React.FC<{openTableFormHandler:()=> void}> = (props) => {
             <div className={classes.inputBox}>
                 <div className={classes.inputField}>
                     <label htmlFor="guestAmount">Guest Amount</label>
-                    <input type="number" id="guestAmount" min="1" max="100" ref={tableGuestAmount}></input>
+                    <input type="number" id="guestAmount" min="2" max="100" step="2" ref={tableGuestAmount}></input>
                 </div>
             </div>
 

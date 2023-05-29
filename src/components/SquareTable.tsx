@@ -23,16 +23,18 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
 
   const tableRef = useRef<HTMLDivElement>(null);
   const isClicked = useRef<boolean>(false);
+  const [sendCoords, isSendCoords] = useState<boolean>(false)
 
   const coords = useRef<{
     startX: number,
     startY: number,
     lastX: number,
     lastY: number
-  }>({startX:0, startY: 0, lastX: 0, lastY:0})
+  }>({startX: props.table.startX ?? 0,
+    startY: props.table.startY ?? 0, lastX: props.table.lastX ?? 0, lastY: props.table.lastY ?? 0})
 
 
-  const [rotation, setRotation] = useState<number>(0);
+  const [rotation, setRotation] = useState<number>(props.table.rotation);
 
 
 
@@ -46,6 +48,69 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
       table.style.left = "10px";
     }
   };
+
+  useEffect(()=>
+  {
+    const table = tableRef.current;
+    if(table)
+    {
+
+      table.style.top = `${props.table.y}px`;
+      table.style.left = `${props.table.x}px`;
+    }   
+
+  }, [])
+
+  //send rotation of table to DB
+  useEffect(()=>
+  { 
+
+    const tableId = props.table.id;
+    const updatedTables = tables.map(table=>
+      {
+        if(table.id === tableId)
+        {
+          return {...table, rotation: rotation}
+        }
+        else return table
+      })
+
+      console.log(updatedTables)
+
+      ctx.updateTables(updatedTables)
+  }, [rotation])
+
+  //send table position to DB
+  //seems to work but performence issues
+  useEffect(() => {
+    const table = tableRef.current;
+    if (table) {
+      const tableId = props.table.id;
+      const nextY = parseInt(table.style.top);
+      const nextX = parseInt(table.style.left);
+      
+      const updatedTables = tables.map((table) => {
+        if (table.id === tableId) {
+          return {
+            ...table,
+            x: nextX,
+            y: nextY,
+            startX: coords.current.startX,
+            startY: coords.current.startY,
+            lastX: coords.current.lastX,
+            lastY: coords.current.lastY,
+            rotation: rotation
+          };
+        } else {
+          return table;
+        }
+      });
+  
+      console.log(updatedTables);
+      ctx.updateTables(updatedTables);
+    }
+  }, [sendCoords]);
+
 
   useEffect(()=>
   {
@@ -71,6 +136,13 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
         isClicked.current = false;
         coords.current.lastX = table.offsetLeft;
         coords.current.lastY = table.offsetTop;
+
+        isSendCoords((prev)=>
+        {
+          return !prev
+        })
+        
+
       }
       const onMouseMove = (e: MouseEvent) => {
         e.preventDefault();
@@ -89,13 +161,21 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
           table.style.left = `${nextX}px`;
 
         }
+
+
       };
+
+      const onMouseLeave = (e: MouseEvent) =>
+      {
+        e.preventDefault()
+        isClicked.current = false;
+      }
 
       
       table.addEventListener('mousedown', onMouseDown)
       table.addEventListener('mouseup', onMouseUp)
       table.addEventListener('mousemove', onMouseMove)
-      table.addEventListener('mouseleave', onMouseUp);
+      table.addEventListener('mouseleave', onMouseLeave);
       // table.addEventListener('mouseover', onMouseUp)
 
       const cleanup = () =>
@@ -103,7 +183,7 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
         table.removeEventListener('mousedown', onMouseDown)
         table.removeEventListener('mouseup', onMouseUp)
         table.removeEventListener('mousemove', onMouseMove)
-        table.removeEventListener('mouseleave', onMouseUp)
+        table.removeEventListener('mouseleave', onMouseLeave)
         // table.addEventListener('mouseover', onMouseUp)
       }
       
@@ -136,12 +216,12 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
   
           const tableGuests = searchedTable[0].seats.filter(seat=>
             {
-              return seat!==''
+              return seat.name!==''
             })
   
           const guestToLobby = tableGuests.map(guest=>
             {
-              return {name:guest, id: uuidv4()}
+              return {name:guest.name, id: uuidv4(), group: guest.group}
             })
   
             guests = [...guests, ...guestToLobby] 
@@ -213,27 +293,26 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
           
             <div className={classes.table}>
               <span style={{transform: `rotate(${-rotation}deg)`}}>
-              {props.table.name}
+              {props.table && props.table.name ? props.table.name : ''}
               </span>
-              {/* {isTableNameFormOpen && 
-                (<ChangeTableNameForm
-                  changeTableName={changeTableName}
-                  changeNewTableName={changeNewTableName}
-                  newTableName={newTableName}
-                />)
-              } */}
-              {/* {
-                <ChangeTableNameForm
-                changeTableName={changeTableName}
-                changeNewTableName={changeNewTableName}
-                newTableName={newTableName}
-                isTableNameFormOpen = {isTableNameFormOpen}
-              />
-              } */}
-              {seats.map((seat, index)=>
-                {
-                  return <Seat id={index} key = {index} name={seat} tableId ={props.id} onGuestSeatHandle={onSeatMouseUp} style={{transform: `rotate(${-rotation}deg)`}}/>
-                })}
+            
+              {seats.map((seat, index) => {
+              if (!seat) {
+                return; // lub obsłuż ten przypadek w inny sposób
+              }
+              
+              return (
+                <Seat
+                  id={index}
+                  key={index}
+                  name={seat.name}
+                  tableId={props.id}
+                  onGuestSeatHandle={onSeatMouseUp}
+                  group={seat.group}
+                  style={{ transform: `rotate(${-rotation}deg)` }}
+                />
+              );
+            })}
             </div>
 
 
