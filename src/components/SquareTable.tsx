@@ -17,6 +17,7 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
   const ctx = useContext(GuestContext)
   const [isTableNameFormOpen, setIsTableNameFormOpen] = useState<boolean>(false)
   const [newTableName, setNewTableName] = useState<string | number>(props.table.name)
+  const [newGuestAmount, setNewGuestAmount] = useState<string | number>(props.table.seats.length)
   let tables = ctx.tables, guests = ctx.guests
 
   const seats = props.table.seats;
@@ -248,7 +249,11 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
       setNewTableName(e.target.value);
     };
     
-    const changeTableName = (e: React.FormEvent) => {
+    const changeNewGuestAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNewGuestAmount(e.target.value);
+    };
+
+    const changeTable = (e: React.FormEvent) => {
       e.preventDefault();
       // console.log(newTableName);
 
@@ -257,10 +262,44 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
           if(table.id === props.id)
           {
             table.name = newTableName;
+            const actualAmount = table.seats.length;
+            const newSeats = [...table.seats]
+
+            if(actualAmount > Number(newGuestAmount))
+            {
+              //decrease (two arrays)
+              const decreased = newSeats.slice(0, Number(newGuestAmount))
+              const toLobby = newSeats.slice(Number(newGuestAmount))
+
+              table = {...table, seats: decreased}
+              
+              toLobby.forEach(guest=>
+                {
+                  guests.push(guest);
+                })
+              
+            }
+            else if (actualAmount < Number(newGuestAmount)) 
+            {
+              //increase (add to array)
+              const diff = Number(newGuestAmount) - actualAmount
+
+              for(let i = 0; i<diff; i++)
+              {
+                newSeats.push({name:"", id: uuidv4(), group: ""})
+              }
+              table = {...table, seats: newSeats}
+            }
+            
             return table
           }
           else return table
+
         })
+
+        //there you can edit your table guests amount
+
+        
 
         ctx.updateTables(updatedTables)
         openEditTableNameForm()
@@ -272,13 +311,17 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
       {isTableNameFormOpen && (
                 <div className={classes.tableNameFormModal}>  
                
-                  <form className={classes.tableNameForm} onSubmit={changeTableName} style={{top:`${coords.current.lastY}px`}}>
+                  <form className={classes.tableNameForm} onSubmit={changeTable} style={{top:`${coords.current.lastY}px`}}>
 
                   <div className={classes.closeButton}>
                     <AiOutlineCloseSquare onClick = {openEditTableNameForm}/>
                   </div>
                     <input type="text" defaultValue={newTableName} onChange={changeNewTableName} />
-                    <button>Change name</button>
+                   
+                    <label htmlFor="guestAmount">Guest Amount</label>
+                    <input type="number" id="guestAmount" min="2" max="100" step="2" defaultValue={newGuestAmount} onChange={changeNewGuestAmount}></input>
+
+                    <button>Change table</button>
                   </form>
                 </div>)}
 

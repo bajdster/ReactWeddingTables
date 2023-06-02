@@ -266,3 +266,5 @@ export default GuestContext;
 //take care about deleting from table +
 //position of tables?
 //disable seats when dbclick + 
+
+//add edit table seats amount
