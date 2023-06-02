@@ -31,7 +31,9 @@ type GuestContextObj = {
     deleteGuest: (id:string) => void,
     changeTableDrag: (isDragPossibility:boolean) => void,
     getGroup: (group:string)=> void,
-    group: string
+    group: string,
+    darkMode: boolean,
+    toggleDarkMode: ()=> void
 
 }
 
@@ -46,7 +48,9 @@ const GuestContext = React.createContext<GuestContextObj>({
     deleteGuest: () => {},
     changeTableDrag: ()=> {},
     getGroup: () => {},
-    group: ""
+    group: "",
+    darkMode: false,
+    toggleDarkMode: () => {}
 })
 
 export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props) =>
@@ -55,6 +59,7 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
     const [tables, setTables] = useState<Table[]>([]);
     const [canTableDrag, setCanTableDrag] = useState<boolean>(true);
     const [group, setGroup] = useState<string>("")
+    const [darkMode, setDarkMode] = useState(false)
 
     //prod
     // const guestURL:string = "https://wedding-tables-22036-default-rtdb.firebaseio.com/guests.json"
@@ -69,6 +74,14 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
         loadGuests();
         loadTables();
     }, [])
+
+    const toggleDarkMode = () =>
+    {
+        setDarkMode((prev)=>
+        {
+            return !prev
+        })
+    }
 
     const loadGuests = async () =>
     {
@@ -241,7 +254,9 @@ export const GuestContextProvider: React.FC<{children:React.ReactNode}> = (props
         updateGuests: updateGuests,
         deleteGuest: deleteGuest,
         changeTableDrag: changeTableDrag,
-        getGroup:getGroup
+        getGroup:getGroup,
+        darkMode: darkMode,
+        toggleDarkMode: toggleDarkMode
     }
 
     return (

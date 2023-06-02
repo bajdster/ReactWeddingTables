@@ -334,7 +334,7 @@ const SquareTable: React.FC<{ table: Table, hall:React.RefObject<HTMLDivElement>
           ref={tableRef}
         >
           
-            <div className={classes.table}>
+            <div className={classes.table} style={ctx.darkMode ? { backgroundColor: "rgb(36,40,40)" } : {}}>
               <span style={{transform: String(props.table.name).length < 2 ? `rotate(${-rotation}deg)`: "none"}}>
               {props.table && props.table.name ? props.table.name : ''}
               </span>

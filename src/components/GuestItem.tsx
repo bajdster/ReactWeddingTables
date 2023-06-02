@@ -59,7 +59,7 @@ const GuestItem: React.FC<{
           }}
         >
           <BsPersonCircle />
-          <div className={classes.description} onDoubleClick={showDeleteButton} style={{fontSize: props.guestContent.length > 20 ? '10px' : '13px' }}>
+          <div className={classes.description} onDoubleClick={showDeleteButton} style={{fontSize: props.guestContent.length > 20 ? '10px' : '13px',  backgroundColor: ctx.darkMode ?"black": "", color: ctx.darkMode ? "white": ""}}>
             {props.guestContent}
           </div>
           {isDeleteButtonOpen && <div className={classes.deleteGuestButton} onClick={removeGuest}>

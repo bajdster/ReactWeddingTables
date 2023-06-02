@@ -33,7 +33,7 @@ const AsideMenu: React.FC<Props> = ({ openFormHandler, openTableFormHandler, ope
   //its time to add implementation of CSV parsing from file
   return (
     
-        <aside className={`${classes.asideMenu} ${isMenuClosed? classes.menuClosed : ""}`} style = {{transition:'all .5s ease'}}>
+        <aside className={`${classes.asideMenu} ${isMenuClosed? classes.menuClosed : ""}`}  style={ { backgroundColor: ctx.darkMode ? "rgb(35,38,38)": "", color: ctx.darkMode ? "grey" : "" }} >
           
             <div className={classes.showMenu} onClick={menuCloseHandler} style={isMenuClosed ? {transform: `rotate(180deg)`, transition:'all .5s ease'}: {}}>
               <MdOutlineMenuOpen/>
