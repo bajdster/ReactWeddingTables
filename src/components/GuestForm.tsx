@@ -146,13 +146,14 @@ useEffect(()=>
                 </div>)
                 })
             }
-
+//need to correct this on production
             <div className={classes.inputBox}>
                 <div className={classes.inputField}>
                     <label htmlFor="group">Group</label>
                     <select onChange={(e:React.ChangeEvent<HTMLSelectElement>)=> setGroup(e.target.value)}>
-                        <option value="bride">Bride guests</option>
-                        <option value="groom">Groom guests</option>
+                        
+                        <option value="Bride">Bride guests</option>
+                        <option value="Groom">Groom guests</option>
                         <option value="Newlyweds">Newlyweds</option>
                     </select>
                 </div>
